@@ -3,6 +3,7 @@ import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../utils/firebase';
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
+import NationMapOverlay from '../components/NationMapOverlay';
 import AuthModal from '../components/AuthModal';
 import AboutPanel from '../components/AboutPanel';
 import DisclaimerPanel from '../components/DisclaimerPanel';
@@ -43,6 +44,7 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
+
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -58,7 +60,6 @@ export default function Home() {
     await signOut(auth);
     alert("Logged out successfully.");
   };
-
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -177,4 +178,4 @@ export default function Home() {
       <NationMapOverlay />
     </div>
   );
-}
+            }
