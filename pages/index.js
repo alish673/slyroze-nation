@@ -1,4 +1,5 @@
 import Header from '../components/Header';
+import HeroBackground from '../components/HeroBackground';
 import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
@@ -116,7 +117,8 @@ export default function Home() {
     loadLeaders();
   }, []);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
+      <HeroBackground />
       <Header />
       <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Welcome to Slyroze Nation</h1>
@@ -134,14 +136,14 @@ export default function Home() {
             </div>
             <button
               disabled={!!loadingMessage}
-              className={`bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-neonPurple text-white py-2 px-4 rounded shadow-neon transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleMintPassport}
             >
               Mint Passport (200 SLYP)
             </button>
             <button
               disabled={!!loadingMessage}
-              className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`bg-neonGreen text-black py-2 px-4 rounded shadow-neon transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleClaimZone}
             >
               Claim Zone (Dynamic SLYP)
@@ -158,7 +160,7 @@ export default function Home() {
               />
               <button
                 disabled={!!loadingMessage}
-                className={`bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded mt-2 transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`bg-yellow-500 hover:bg-yellow-600 text-black py-2 px-4 rounded mt-2 transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={handleSetAlias}
               >
                 Save Nickname
@@ -181,7 +183,7 @@ export default function Home() {
         ) : (
           <button
             disabled={!!loadingMessage}
-            className={`bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded shadow-neon transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={handleConnectWallet}
           >
             Connect Wallet
@@ -213,4 +215,4 @@ export default function Home() {
       )}
     </div>
   );
-}
+    }
