@@ -12,7 +12,7 @@ import Leaderboard from '../components/Leaderboard';
 import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
-import { claimZone } from '../utils/land';
+import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { deleteUserAccount } from '../utils/deleteUser';
@@ -77,13 +77,14 @@ export default function Home() {
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
-      const zoneNumber = prompt("Enter Zone Number to Claim (e.g., 1001):");
-      if (!zoneNumber) return;
-      setLoadingMessage(`Claiming Zone ${zoneNumber}...`);
-      const price = await claimZone(signer, provider, walletAddress, zoneNumber);
-      const balance = await getSlypBalance(provider, walletAddress);
-      setSlypBalance(balance);
-      alert(`Zone ${zoneNumber} claimed for ${price} SLYP!`);
+      const zoneId = prompt("Enter Zone ID to claim (e.g., zone-000001):");
+      if (!zoneId) return;
+      const slypPrice = 50; // Example
+      setLoadingMessage(`Claiming ${zoneId}...`);
+      const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
+      alert(result);
+      const updatedLeaderboard = await getLeaderboard();
+      setLeaderboard(updatedLeaderboard);
     } catch (err) {
       console.error(err);
       alert("Claim failed: " + err.message);
@@ -96,7 +97,7 @@ export default function Home() {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
       setLoadingMessage("Saving Nickname...");
-      if (!user) return alert("You need to be logged in with Firebase.");
+      if (!user) return alert("Login required.");
       await setUserAlias(user.uid, nickname);
       const data = await getLeaderboard();
       setLeaderboard(data);
@@ -111,29 +112,21 @@ export default function Home() {
 
   const handleDeleteAccount = async () => {
     const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
-    if (confirmDelete !== 'delete') return alert("Deletion cancelled.");
+    if (confirmDelete !== 'delete') return alert("Cancelled.");
     try {
       setLoadingMessage("Deleting Account...");
-      if (!user) return alert("You need to be logged in with Firebase.");
+      if (!user) return alert("Login required.");
       await deleteUserAccount(user.uid);
       const data = await getLeaderboard();
       setLeaderboard(data);
-      alert("Account deleted successfully.");
+      alert("Account deleted.");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete account: " + err.message);
+      alert("Failed to delete: " + err.message);
     } finally {
       setLoadingMessage("");
     }
   };
-  useEffect(() => {
-    async function loadLeaders() {
-      const data = await getLeaderboard();
-      setLeaderboard(data);
-    }
-    loadLeaders();
-  }, []);
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
@@ -157,10 +150,14 @@ export default function Home() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
           <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
-          <button onClick={() => setShowNicknameModal(true)} className="bg-yellow-500 hover:bg-yellow-600 text-black py-2 px-4 rounded">Set Nickname</button>
+          {user && (
+            <>
+              <button onClick={() => setShowNicknameModal(true)} className="bg-yellow-500 hover:bg-yellow-600 text-black py-2 px-4 rounded">Set Nickname</button>
+              <button onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Delete Account</button>
+            </>
+          )}
           <button onClick={handleMintPassport} className="bg-neonPurple text-white py-2 px-4 rounded shadow-neon">Mint Passport</button>
           <button onClick={handleClaimZone} className="bg-neonGreen text-black py-2 px-4 rounded shadow-neon">Claim Zone</button>
-          <button onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Delete Account</button>
         </div>
 
         <Leaderboard data={leaderboard} />
@@ -178,4 +175,4 @@ export default function Home() {
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
     </div>
   );
-  }
+}
