@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from '../utils/firebase';
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
 import AuthModal from '../components/AuthModal';
@@ -30,10 +31,10 @@ export default function Home() {
   const [showNicknameModal, setShowNicknameModal] = useState(false);
 
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
+
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -46,7 +47,6 @@ export default function Home() {
   };
 
   const handleLogout = async () => {
-    const auth = getAuth();
     await signOut(auth);
     alert("Logged out successfully.");
   };
@@ -66,7 +66,6 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
-
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -89,8 +88,6 @@ export default function Home() {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
       setLoadingMessage("Saving Nickname...");
-      const auth = getAuth();
-      const user = auth.currentUser;
       if (!user) return alert("You need to be logged in with Firebase.");
       await setUserAlias(user.uid, nickname);
       const data = await getLeaderboard();
@@ -109,8 +106,6 @@ export default function Home() {
     if (confirmDelete !== 'delete') return alert("Deletion cancelled.");
     try {
       setLoadingMessage("Deleting Account...");
-      const auth = getAuth();
-      const user = auth.currentUser;
       if (!user) return alert("You need to be logged in with Firebase.");
       await deleteUserAccount(user.uid);
       const data = await getLeaderboard();
@@ -123,14 +118,6 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
-
-  useEffect(() => {
-    async function loadLeaders() {
-      const data = await getLeaderboard();
-      setLeaderboard(data);
-    }
-    loadLeaders();
-  }, []);
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
@@ -176,3 +163,11 @@ export default function Home() {
     </div>
   );
     }
+
+  useEffect(() => {
+    async function loadLeaders() {
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    }
+    loadLeaders();
+  }, []);
