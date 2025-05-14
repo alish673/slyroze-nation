@@ -1,23 +1,15 @@
 export default function DisclaimerPanel({ onClose }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-      <div className="bg-gray-900 text-white p-6 rounded-xl shadow-lg max-w-md w-full space-y-4 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl"
-        >
-          &times;
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+      <div className="bg-gray-900 p-6 rounded shadow-lg text-white max-w-md w-full space-y-4">
+        <h2 className="text-2xl font-bold">Disclaimer</h2>
+        <p>
+          Slyroze Nation is a decentralized platform. Digital Passports, Zones, and SLYP tokens
+          are blockchain assets with no guaranteed financial return. Participate at your own risk.
+        </p>
+        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 py-2 px-4 rounded">
+          Close
         </button>
-        <h2 className="text-2xl font-bold text-slyrozeBlue">Disclaimer</h2>
-        <p className="text-sm text-gray-300">
-          Slyroze Nation is a digital collectible platform. All land zones, passports, and SlyPass tokens are virtual assets with no guaranteed financial value.
-        </p>
-        <p className="text-sm text-gray-300">
-          Participation involves blockchain transactions and is subject to market risks. Please do your own research before engaging.
-        </p>
-        <p className="text-xs text-gray-500 mt-4 text-center">
-          This is not financial advice.
-        </p>
       </div>
     </div>
   );
