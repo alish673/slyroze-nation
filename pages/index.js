@@ -1,14 +1,18 @@
 import Header from '../components/Header';
 import { connectWallet } from '../utils/wallet';
+import { getSlypBalance } from '../utils/slyp';
 import { useState } from 'react';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState("");
+  const [slypBalance, setSlypBalance] = useState("");
 
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
       setWalletAddress(result.address);
+      const balance = await getSlypBalance(result.provider, result.address);
+      setSlypBalance(balance);
     }
   };
 
@@ -20,9 +24,15 @@ export default function Home() {
         <p className="mb-6">Mint. Claim. Earn Monthly SLYP Rewards.</p>
 
         {walletAddress ? (
-          <div className="bg-gray-800 p-4 rounded shadow-lg">
-            <p className="text-green-400">Connected Wallet:</p>
-            <p className="break-all">{walletAddress}</p>
+          <div className="bg-gray-800 p-4 rounded shadow-lg space-y-2">
+            <div>
+              <p className="text-green-400">Connected Wallet:</p>
+              <p className="break-all">{walletAddress}</p>
+            </div>
+            <div>
+              <p className="text-purple-400">SLYP Balance:</p>
+              <p>{slypBalance} SLYP</p>
+            </div>
           </div>
         ) : (
           <button
@@ -35,4 +45,4 @@ export default function Home() {
       </main>
     </div>
   );
-          }
+}
