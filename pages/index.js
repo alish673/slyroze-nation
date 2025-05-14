@@ -35,6 +35,13 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    async function loadLeaders() {
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    }
+    loadLeaders();
+  }, []);
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -66,6 +73,7 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
+
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -118,6 +126,14 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
+  useEffect(() => {
+    async function loadLeaders() {
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    }
+    loadLeaders();
+  }, []);
+
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
@@ -162,12 +178,4 @@ export default function Home() {
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
     </div>
   );
-    }
-
-  useEffect(() => {
-    async function loadLeaders() {
-      const data = await getLeaderboard();
-      setLeaderboard(data);
-    }
-    loadLeaders();
-  }, []);
+  }
