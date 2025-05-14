@@ -3,13 +3,15 @@ import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
 import { claimZone } from '../utils/land';
-import { useState } from 'react';
+import { getLeaderboard } from '../utils/leaderboard';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
+  const [leaderboard, setLeaderboard] = useState([]);
 
   const handleConnectWallet = async () => {
     const result = await connectWallet();
@@ -54,6 +56,14 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    async function loadLeaders() {
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    }
+    loadLeaders();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <Header />
@@ -92,7 +102,24 @@ export default function Home() {
             Connect Wallet
           </button>
         )}
+
+        <div className="mt-10">
+          <h2 className="text-2xl font-semibold mb-2">Leaderboard</h2>
+          <ul className="space-y-2">
+            {leaderboard.map((user, index) => (
+              <li key={index} className="bg-gray-700 p-3 rounded shadow">
+                <div className="flex justify-between items-center">
+                  <span className="text-white">{user.alias}</span>
+                  <span className="text-purple-300">{user.slyp} SLYP</span>
+                </div>
+                {user.lands.length > 0 && (
+                  <p className="text-sm text-gray-400">Zones: {user.lands.join(', ')}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       </main>
     </div>
   );
-          }
+    }
