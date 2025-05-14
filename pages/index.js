@@ -5,6 +5,7 @@ import { mintPassport } from '../utils/passport';
 import { claimZone } from '../utils/land';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
+import { deleteUserAccount } from '../utils/deleteUser';
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from 'react';
 
@@ -79,6 +80,26 @@ export default function Home() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
+    if (confirmDelete !== 'delete') return alert("Deletion cancelled.");
+
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return alert("You need to be logged in with Firebase.");
+
+      await deleteUserAccount(user.uid);
+      alert("Account deleted successfully from database.");
+
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete account: " + err.message);
+    }
+  };
+
   useEffect(() => {
     async function loadLeaders() {
       const data = await getLeaderboard();
@@ -132,6 +153,18 @@ export default function Home() {
               >
                 Save Nickname
               </button>
+
+              <div className="mt-6">
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+                  onClick={handleDeleteAccount}
+                >
+                  Delete My Account
+                </button>
+                <p className="text-sm text-gray-400 mt-1">
+                  Warning: This will remove your data from the leaderboard.
+                </p>
+              </div>
             </div>
           </div>
         ) : (
@@ -162,4 +195,4 @@ export default function Home() {
       </main>
     </div>
   );
-        }
+}
