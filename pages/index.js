@@ -2,6 +2,7 @@ import Header from '../components/Header';
 import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
+import { claimZone } from '../utils/land';
 import { useState } from 'react';
 
 export default function Home() {
@@ -35,6 +36,24 @@ export default function Home() {
     }
   };
 
+  const handleClaimZone = async () => {
+    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    try {
+      const zoneNumber = prompt("Enter Zone Number to Claim (e.g., 1001):");
+      if (!zoneNumber) return;
+
+      alert("Claiming Zone...");
+      const price = await claimZone(signer, provider, walletAddress, zoneNumber);
+      alert(`Zone ${zoneNumber} claimed for ${price} SLYP!`);
+
+      const balance = await getSlypBalance(provider, walletAddress);
+      setSlypBalance(balance);
+    } catch (err) {
+      console.error(err);
+      alert("Claim failed: " + err.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <Header />
@@ -58,6 +77,12 @@ export default function Home() {
             >
               Mint Passport (200 SLYP)
             </button>
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded"
+              onClick={handleClaimZone}
+            >
+              Claim Zone (Dynamic SLYP)
+            </button>
           </div>
         ) : (
           <button
@@ -70,4 +95,4 @@ export default function Home() {
       </main>
     </div>
   );
-    }
+          }
