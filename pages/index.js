@@ -3,7 +3,6 @@ import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../utils/firebase';
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
-import NationMapOverlay from '../components/NationMapOverlay';
 import AuthModal from '../components/AuthModal';
 import AboutPanel from '../components/AboutPanel';
 import DisclaimerPanel from '../components/DisclaimerPanel';
@@ -44,7 +43,6 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
-
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -76,12 +74,13 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
+
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
       const zoneId = prompt("Enter Zone ID to claim (e.g., zone-000001):");
       if (!zoneId) return;
-      const slypPrice = 50; // Dynamic pricing placeholder
+      const slypPrice = 50;
       setLoadingMessage(`Claiming ${zoneId}...`);
       const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
       alert(result);
@@ -129,12 +128,11 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
       <Header />
-    <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6">
+      <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6">
         <h1 className="text-3xl font-bold">Welcome to Slyroze Nation</h1>
         <p>Mint. Claim. Earn Monthly SLYP Rewards.</p>
 
@@ -163,6 +161,7 @@ export default function Home() {
         </div>
 
         <Leaderboard data={leaderboard} />
+        <ZoneGrid signer={signer} walletAddress={walletAddress} />
       </main>
 
       {loadingMessage && (
@@ -175,6 +174,7 @@ export default function Home() {
       {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
       {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
+      <NationMapOverlay />
     </div>
   );
-  }
+}
