@@ -6,7 +6,7 @@ import { mintPassport } from '../utils/passport';
 import { claimZone } from '../utils/land';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
-import { deleteUserAccount } from '../utils/deleteUser';
+import { deleteUserAccount } from '../utils/deleteuser'; // Fixed casing
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from 'react';
 
@@ -64,7 +64,6 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
-
   const handleSetAlias = async () => {
     if (!walletAddress) return alert("Connect Wallet first.");
     if (!nicknameInput) return alert("Enter a nickname.");
@@ -116,6 +115,7 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
+
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
@@ -148,7 +148,6 @@ export default function Home() {
             >
               Claim Zone (Dynamic SLYP)
             </button>
-
             <div className="mt-6">
               <h2 className="text-xl font-semibold mb-2">Set Your Nickname</h2>
               <input
@@ -165,7 +164,6 @@ export default function Home() {
               >
                 Save Nickname
               </button>
-
               <div className="mt-6">
                 <button
                   disabled={!!loadingMessage}
@@ -215,4 +213,4 @@ export default function Home() {
       )}
     </div>
   );
-    }
+  }
