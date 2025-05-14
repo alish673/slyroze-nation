@@ -1,18 +1,37 @@
 import Header from '../components/Header';
 import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
+import { mintPassport } from '../utils/passport';
 import { useState } from 'react';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
 
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
       setWalletAddress(result.address);
+      setProvider(result.provider);
+      setSigner(result.signer);
       const balance = await getSlypBalance(result.provider, result.address);
       setSlypBalance(balance);
+    }
+  };
+
+  const handleMintPassport = async () => {
+    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    try {
+      alert("Minting Passport...");
+      await mintPassport(signer, walletAddress);
+      alert("Passport Minted Successfully!");
+      const balance = await getSlypBalance(provider, walletAddress);
+      setSlypBalance(balance);
+    } catch (err) {
+      console.error(err);
+      alert("Minting failed: " + err.message);
     }
   };
 
@@ -24,7 +43,7 @@ export default function Home() {
         <p className="mb-6">Mint. Claim. Earn Monthly SLYP Rewards.</p>
 
         {walletAddress ? (
-          <div className="bg-gray-800 p-4 rounded shadow-lg space-y-2">
+          <div className="bg-gray-800 p-4 rounded shadow-lg space-y-4">
             <div>
               <p className="text-green-400">Connected Wallet:</p>
               <p className="break-all">{walletAddress}</p>
@@ -33,6 +52,12 @@ export default function Home() {
               <p className="text-purple-400">SLYP Balance:</p>
               <p>{slypBalance} SLYP</p>
             </div>
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              onClick={handleMintPassport}
+            >
+              Mint Passport (200 SLYP)
+            </button>
           </div>
         ) : (
           <button
@@ -45,4 +70,4 @@ export default function Home() {
       </main>
     </div>
   );
-}
+    }
