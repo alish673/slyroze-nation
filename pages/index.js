@@ -6,7 +6,7 @@ import { mintPassport } from '../utils/passport';
 import { claimZone } from '../utils/land';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
-import { deleteUserAccount } from '../utils/deleteuser'; // Fixed casing
+import { deleteUserAccount } from '../utils/deleteUser'; // Fixed casing
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from 'react';
 
