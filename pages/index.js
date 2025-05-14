@@ -4,6 +4,8 @@ import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
 import { claimZone } from '../utils/land';
 import { getLeaderboard } from '../utils/leaderboard';
+import { setUserAlias } from '../utils/nickname';
+import { getAuth } from "firebase/auth";
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -12,6 +14,7 @@ export default function Home() {
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
+  const [nicknameInput, setNicknameInput] = useState("");
 
   const handleConnectWallet = async () => {
     const result = await connectWallet();
@@ -56,6 +59,26 @@ export default function Home() {
     }
   };
 
+  const handleSetAlias = async () => {
+    if (!walletAddress) return alert("Connect Wallet first.");
+    if (!nicknameInput) return alert("Enter a nickname.");
+
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return alert("You need to be logged in with Firebase.");
+
+      await setUserAlias(user.uid, nicknameInput);
+      alert("Nickname set successfully!");
+
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to set nickname: " + err.message);
+    }
+  };
+
   useEffect(() => {
     async function loadLeaders() {
       const data = await getLeaderboard();
@@ -93,6 +116,23 @@ export default function Home() {
             >
               Claim Zone (Dynamic SLYP)
             </button>
+
+            <div className="mt-6">
+              <h2 className="text-xl font-semibold mb-2">Set Your Nickname</h2>
+              <input
+                type="text"
+                className="w-full max-w-xs p-2 rounded text-black"
+                placeholder="Enter nickname"
+                value={nicknameInput}
+                onChange={(e) => setNicknameInput(e.target.value)}
+              />
+              <button
+                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded mt-2"
+                onClick={handleSetAlias}
+              >
+                Save Nickname
+              </button>
+            </div>
           </div>
         ) : (
           <button
@@ -122,4 +162,4 @@ export default function Home() {
       </main>
     </div>
   );
-    }
+        }
