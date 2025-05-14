@@ -16,6 +16,7 @@ export default function Home() {
   const [signer, setSigner] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [nicknameInput, setNicknameInput] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   const handleConnectWallet = async () => {
     const result = await connectWallet();
@@ -31,14 +32,16 @@ export default function Home() {
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
-      alert("Minting Passport...");
+      setLoadingMessage("Minting Passport...");
       await mintPassport(signer, walletAddress);
-      alert("Passport Minted Successfully!");
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
+      alert("Passport Minted Successfully!");
     } catch (err) {
       console.error(err);
       alert("Minting failed: " + err.message);
+    } finally {
+      setLoadingMessage("");
     }
   };
 
@@ -48,15 +51,16 @@ export default function Home() {
       const zoneNumber = prompt("Enter Zone Number to Claim (e.g., 1001):");
       if (!zoneNumber) return;
 
-      alert("Claiming Zone...");
+      setLoadingMessage(`Claiming Zone ${zoneNumber}...`);
       const price = await claimZone(signer, provider, walletAddress, zoneNumber);
-      alert(`Zone ${zoneNumber} claimed for ${price} SLYP!`);
-
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
+      alert(`Zone ${zoneNumber} claimed for ${price} SLYP!`);
     } catch (err) {
       console.error(err);
       alert("Claim failed: " + err.message);
+    } finally {
+      setLoadingMessage("");
     }
   };
 
@@ -65,18 +69,20 @@ export default function Home() {
     if (!nicknameInput) return alert("Enter a nickname.");
 
     try {
+      setLoadingMessage("Saving Nickname...");
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) return alert("You need to be logged in with Firebase.");
 
       await setUserAlias(user.uid, nicknameInput);
-      alert("Nickname set successfully!");
-
       const data = await getLeaderboard();
       setLeaderboard(data);
+      alert("Nickname set successfully!");
     } catch (err) {
       console.error(err);
       alert("Failed to set nickname: " + err.message);
+    } finally {
+      setLoadingMessage("");
     }
   };
 
@@ -85,18 +91,20 @@ export default function Home() {
     if (confirmDelete !== 'delete') return alert("Deletion cancelled.");
 
     try {
+      setLoadingMessage("Deleting Account...");
       const auth = getAuth();
       const user = auth.currentUser;
       if (!user) return alert("You need to be logged in with Firebase.");
 
       await deleteUserAccount(user.uid);
-      alert("Account deleted successfully from database.");
-
       const data = await getLeaderboard();
       setLeaderboard(data);
+      alert("Account deleted successfully from database.");
     } catch (err) {
       console.error(err);
       alert("Failed to delete account: " + err.message);
+    } finally {
+      setLoadingMessage("");
     }
   };
 
@@ -107,32 +115,33 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <Header />
-      <main className="container mx-auto p-4 text-center">
+      <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Welcome to Slyroze Nation</h1>
         <p className="mb-6">Mint. Claim. Earn Monthly SLYP Rewards.</p>
 
         {walletAddress ? (
-          <div className="bg-gray-800 p-4 rounded shadow-lg space-y-4">
+          <div className="bg-gray-800 p-4 rounded shadow-lg space-y-4 transition-transform hover:scale-105">
             <div>
               <p className="text-green-400">Connected Wallet:</p>
-              <p className="break-all">{walletAddress}</p>
+              <p className="break-words text-sm">{walletAddress}</p>
             </div>
             <div>
               <p className="text-purple-400">SLYP Balance:</p>
               <p>{slypBalance} SLYP</p>
             </div>
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              disabled={!!loadingMessage}
+              className={`bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleMintPassport}
             >
               Mint Passport (200 SLYP)
             </button>
             <button
-              className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded"
+              disabled={!!loadingMessage}
+              className={`bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleClaimZone}
             >
               Claim Zone (Dynamic SLYP)
@@ -148,7 +157,8 @@ export default function Home() {
                 onChange={(e) => setNicknameInput(e.target.value)}
               />
               <button
-                className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded mt-2"
+                disabled={!!loadingMessage}
+                className={`bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded mt-2 transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={handleSetAlias}
               >
                 Save Nickname
@@ -156,7 +166,8 @@ export default function Home() {
 
               <div className="mt-6">
                 <button
-                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+                  disabled={!!loadingMessage}
+                  className={`bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handleDeleteAccount}
                 >
                   Delete My Account
@@ -169,7 +180,8 @@ export default function Home() {
           </div>
         ) : (
           <button
-            className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded"
+            disabled={!!loadingMessage}
+            className={`bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded transition-transform active:scale-95 ${loadingMessage ? 'opacity-50 cursor-not-allowed' : ''}`}
             onClick={handleConnectWallet}
           >
             Connect Wallet
@@ -178,9 +190,9 @@ export default function Home() {
 
         <div className="mt-10">
           <h2 className="text-2xl font-semibold mb-2">Leaderboard</h2>
-          <ul className="space-y-2">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {leaderboard.map((user, index) => (
-              <li key={index} className="bg-gray-700 p-3 rounded shadow">
+              <li key={index} className="bg-gray-700 p-3 rounded shadow transition-transform hover:scale-105">
                 <div className="flex justify-between items-center">
                   <span className="text-white">{user.alias}</span>
                   <span className="text-purple-300">{user.slyp} SLYP</span>
@@ -193,6 +205,12 @@ export default function Home() {
           </ul>
         </div>
       </main>
+
+      {loadingMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <p className="text-xl text-white animate-pulse">{loadingMessage}</p>
+        </div>
+      )}
     </div>
   );
 }
