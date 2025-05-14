@@ -44,7 +44,6 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
-
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -60,6 +59,7 @@ export default function Home() {
     await signOut(auth);
     alert("Logged out successfully.");
   };
+
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -133,6 +133,7 @@ export default function Home() {
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
       <Header />
+
       <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6">
         <h1 className="text-3xl font-bold">Welcome to Slyroze Nation</h1>
         <p>Mint. Claim. Earn Monthly SLYP Rewards.</p>
@@ -178,4 +179,4 @@ export default function Home() {
       <NationMapOverlay />
     </div>
   );
-            }
+    }
