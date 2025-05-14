@@ -3,6 +3,8 @@ import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
 import AuthModal from '../components/AuthModal';
+import AboutPanel from '../components/AboutPanel';
+import DisclaimerPanel from '../components/DisclaimerPanel';
 import { connectWallet } from '../utils/wallet';
 import { getSlypBalance } from '../utils/slyp';
 import { mintPassport } from '../utils/passport';
@@ -21,6 +23,8 @@ export default function Home() {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showAboutPanel, setShowAboutPanel] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -44,6 +48,81 @@ export default function Home() {
     await signOut(auth);
     alert("Logged out successfully.");
   };
+
+  const handleMintPassport = async () => {
+    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    try {
+      setLoadingMessage("Minting Passport...");
+      await mintPassport(signer, walletAddress);
+      const balance = await getSlypBalance(provider, walletAddress);
+      setSlypBalance(balance);
+      alert("Passport Minted Successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Minting failed: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  const handleClaimZone = async () => {
+    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    try {
+      const zoneNumber = prompt("Enter Zone Number to Claim (e.g., 1001):");
+      if (!zoneNumber) return;
+      setLoadingMessage(`Claiming Zone ${zoneNumber}...`);
+      const price = await claimZone(signer, provider, walletAddress, zoneNumber);
+      const balance = await getSlypBalance(provider, walletAddress);
+      setSlypBalance(balance);
+      alert(`Zone ${zoneNumber} claimed for ${price} SLYP!`);
+    } catch (err) {
+      console.error(err);
+      alert("Claim failed: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  const handleSetAlias = async () => {
+    if (!walletAddress) return alert("Connect Wallet first.");
+    if (!nicknameInput) return alert("Enter a nickname.");
+    try {
+      setLoadingMessage("Saving Nickname...");
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return alert("You need to be logged in with Firebase.");
+      await setUserAlias(user.uid, nicknameInput);
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+      alert("Nickname set successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to set nickname: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
+    if (confirmDelete !== 'delete') return alert("Deletion cancelled.");
+    try {
+      setLoadingMessage("Deleting Account...");
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return alert("You need to be logged in with Firebase.");
+      await deleteUserAccount(user.uid);
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+      alert("Account deleted successfully from database.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete account: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
   useEffect(() => {
     async function loadLeaders() {
       const data = await getLeaderboard();
@@ -51,7 +130,6 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       <HeroBackground />
@@ -139,10 +217,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* Ecosystem Buttons Placeholder */}
         <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
-          <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
+          <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
+          <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
           <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">My Stats</button>
           <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">SlyPass Mint</button>
           <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Land Market</button>
@@ -153,8 +230,8 @@ export default function Home() {
           <h2 className="text-2xl font-semibold mb-2">Leaderboard</h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {leaderboard.map((user, index) => (
-              <li key={index} className="bg-gray-700 p-3 rounded shadow">
-                <div className="flex justify-between">
+              <li key={index} className="bg-gray-700 p-3 rounded shadow transition-transform hover:scale-105">
+                <div className="flex justify-between items-center">
                   <span>{user.alias}</span>
                   <span className="text-purple-300">{user.slyp} SLYP</span>
                 </div>
@@ -166,14 +243,15 @@ export default function Home() {
           </ul>
         </div>
       </main>
-
-      {loadingMessage && (
+{loadingMessage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <p className="text-xl text-white animate-pulse">{loadingMessage}</p>
         </div>
       )}
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
+      {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
     </div>
   );
-          }
+        }
