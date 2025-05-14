@@ -1,22 +1,23 @@
 export default function AboutPanel({ onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-      <div className="bg-darkGray text-white p-6 rounded-2xl shadow-neon max-w-md w-full relative animate-float">
-        <h2 className="text-2xl font-bold mb-4 text-neonPurple">About Slyroze Nation</h2>
-        <p className="text-gray-300 text-sm mb-4">
-          Slyroze Nation is a blockchain-powered digital ecosystem where users can mint unique Passports,
-          claim land zones, and earn monthly SLYP token rewards. Each land zone represents a piece of the
-          Slyroze Nation Metaverse, owned and traded as NFTs.
-        </p>
-        <p className="text-gray-400 text-xs mb-2">
-          Powered by the SlyPass utility token, every interaction helps you grow your influence in the Slyroze economy.
-        </p>
+      <div className="bg-gray-900 text-white p-6 rounded-xl shadow-lg max-w-md w-full space-y-4 relative">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-neonGreen hover:text-slyrozePink transition"
+          className="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl"
         >
-          Close
+          &times;
         </button>
+        <h2 className="text-2xl font-bold text-slyrozePink">About Slyroze Nation</h2>
+        <p className="text-sm text-gray-300">
+          Slyroze Nation is a futuristic blockchain ecosystem where users can mint digital passports, claim land zones, and earn SLYP rewards.
+        </p>
+        <p className="text-sm text-gray-300">
+          By participating, you join an evolving digital economy powered by community engagement and the SlyPass utility token.
+        </p>
+        <p className="text-sm text-gray-400 text-center mt-4">
+          Powered by SlyPass Token.
+        </p>
       </div>
     </div>
   );
