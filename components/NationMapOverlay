@@ -1,0 +1,32 @@
+export default function NationMapOverlay() {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      <svg
+        viewBox="0 0 1200 800"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-full"
+      >
+        <defs>
+          <pattern id="hexPattern" patternUnits="userSpaceOnUse" width="60" height="52">
+            <path d="M30,0 L60,15 L60,45 L30,60 L0,45 L0,15 Z" 
+              stroke="#C084FC" strokeWidth="1" fill="transparent" />
+          </pattern>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <rect width="1200" height="800" fill="url(#hexPattern)" filter="url(#glow)" opacity="0.1" />
+
+        {/* Floating neon dots for aesthetics */}
+        <circle cx="200" cy="150" r="3" fill="#32E875" opacity="0.7" />
+        <circle cx="1000" cy="400" r="2" fill="#FF4FCC" opacity="0.5" />
+        <circle cx="600" cy="600" r="4" fill="#5CFFFF" opacity="0.5" />
+      </svg>
+    </div>
+  );
+}
