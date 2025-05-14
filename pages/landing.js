@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import HeroBackground from '../components/HeroBackground';
 import Header from '../components/Header';
+import AuthModal from '../components/AuthModal';
 
 export default function Landing() {
   const [showLitepaper, setShowLitepaper] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   return (
     <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
@@ -40,7 +42,8 @@ export default function Landing() {
             Slyroze Nation offers land zones as NFTs, leaderboards, and dynamic airdrops. Engage, climb the ranks, and own digital territory with real utility.
           </p>
         </section>
-  <section className="space-y-6">
+
+        <section className="space-y-6">
           <h2 className="text-3xl font-semibold">Tokenomics</h2>
           <p className="max-w-xl mx-auto text-gray-300">
             Total Supply: 100 Million SLY | 10,000 SlyPass | No taxes, fair distribution. Designed for sustainable growth and community incentives.
@@ -56,8 +59,7 @@ export default function Landing() {
             <li>Phase 4: Marketplace & UBI Features</li>
           </ul>
         </section>
-
-        <section className="space-y-6">
+  <section className="space-y-6">
           <h2 className="text-3xl font-semibold">Litepaper</h2>
           <button
             onClick={() => setShowLitepaper(!showLitepaper)}
@@ -73,7 +75,8 @@ export default function Landing() {
             </div>
           )}
         </section>
-<section className="space-y-6">
+
+        <section className="space-y-6">
           <h2 className="text-3xl font-semibold">How to Buy SLY & SlyPass</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a href="https://pancakeswap.finance/swap?outputCurrency=0x8E750e6E68f1378fEe36fEb74d8d28818b3B37b7" target="_blank" rel="noopener noreferrer" className="bg-neonGreen text-black py-2 px-6 rounded shadow hover:scale-105 transition">
@@ -88,12 +91,12 @@ export default function Landing() {
         <section className="space-y-6">
           <h2 className="text-3xl font-semibold">Get Involved</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/nation" className="bg-slyrozeBlue text-black py-2 px-6 rounded shadow hover:scale-105 transition">
+            <Link href="/nation" className="bg-slyrozeBlue text-black py-2 px-6 rounded shadow hover:scale-105 transition">
               Enter Slyroze Nation
-            </a>
-            <a href="/airdrop" className="bg-yellow-400 text-black py-2 px-6 rounded shadow hover:scale-105 transition">
+            </Link>
+            <Link href="/airdrop" className="bg-yellow-400 text-black py-2 px-6 rounded shadow hover:scale-105 transition">
               Claim Airdrop
-            </a>
+            </Link>
             <a href="https://t.me/slyroze" target="_blank" rel="noopener noreferrer" className="bg-purple-600 text-white py-2 px-6 rounded shadow hover:scale-105 transition">
               Join Telegram Community
             </a>
