@@ -60,7 +60,7 @@ export default function Landing() {
             </div>
             <div className="flex justify-center gap-6 mt-8 text-3xl">
               <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition-all"><FaTwitter /></a>
-              <a href="https://t.me/slyroze" target="_blank" className="hover:text-neonGreen hover:scale-125 transition-all"><FaTelegram /></a>
+              <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition-all"><FaTelegram /></a>
               <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition-all"><FaTelegram /></a>
               <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition-all"><FaInstagram /></a>
             </div>
@@ -147,7 +147,7 @@ export default function Landing() {
             <p>&copy; 2025 Slyroze. All rights reserved.</p>
             <div className="flex justify-center gap-6 mt-2 text-2xl">
               <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
-              <a href="https://t.me/slyroze" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
+              <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
               <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
               <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
             </div>
