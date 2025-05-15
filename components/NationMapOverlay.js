@@ -1,16 +1,31 @@
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function NationMapOverlay() {
+  const [imageError, setImageError] = useState(false);
+
   return (
-    <div className="absolute inset-0 -z-10 w-full h-full">
+    <div className="absolute inset-0 -z-50 w-full h-full pointer-events-none">
       {/* Nation PNG Map Background */}
-      <Image
-        src="/slyroze-nation-map.png"
-        alt="Slyroze Nation Map"
-        fill
-        className="object-cover pointer-events-none"
-        priority
-      />
+      {!imageError ? (
+        <Image
+          src="/slyroze-nation-map.png"
+          alt="Slyroze Nation Map"
+          fill
+          className="object-cover"
+          priority
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-red-700 text-white flex items-center justify-center text-2xl font-bold">
+          MAP NOT FOUND
+        </div>
+      )}
+
+      {/* Debug Transparent Red Overlay */}
+      <div className="absolute inset-0 bg-red-500 opacity-10 pointer-events-none z-0">
+        {/* This red tint proves overlay is visible */}
+      </div>
 
       {/* Overlay Hex Pattern & Glow Effects */}
       <svg
