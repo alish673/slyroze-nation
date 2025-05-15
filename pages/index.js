@@ -63,9 +63,11 @@ export default function Landing() {
               <a href="https://pancakeswap.finance/" target="_blank" className="bg-neonGreen text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
                 Buy on PancakeSwap
               </a>
-              <Link href="/index" className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
-                Enter Nation
-              </Link>
+              <Link href="/nation">
+  <a className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
+    Enter Nation
+  </a>
+</Link>
               <Link href="/airdrop" passHref>
   <a className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
     Claim Airdrop
