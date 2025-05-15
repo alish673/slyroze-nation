@@ -2,13 +2,13 @@ import Image from 'next/image';
 
 export default function NationMapOverlay() {
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none w-full h-full">
+    <div className="absolute inset-0 -z-10 w-full h-full">
       {/* Nation PNG Map Background */}
       <Image
-        src="/slyroze-nation-map.png" // Change path if it's inside /assets
+        src="/slyroze-nation-map.png"
         alt="Slyroze Nation Map"
-        layout="fill"
-        objectFit="cover"
+        fill
+        className="object-cover pointer-events-none"
         priority
       />
 
@@ -17,7 +17,7 @@ export default function NationMapOverlay() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 800"
         preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full pointer-events-none"
       >
         <defs>
           <pattern id="hexPattern" patternUnits="userSpaceOnUse" width="60" height="52">
@@ -47,4 +47,4 @@ export default function NationMapOverlay() {
       </svg>
     </div>
   );
-          }
+                }
