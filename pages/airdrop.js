@@ -21,7 +21,7 @@ export default function Airdrop() {
           </p>
           <ol className="list-decimal text-left max-w-2xl mx-auto text-gray-300 space-y-2">
             <li>Follow <a href="https://twitter.com/slyroze" target="_blank" className="text-neonPurple underline">Slyroze on Twitter</a></li>
-            <li>Join our <a href="https://t.me/slyroze" target="_blank" className="text-neonGreen underline">Telegram Group</a></li>
+            <li>Join our <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="text-neonGreen underline">Telegram Group</a></li>
             <li>Join the <a href="https://t.me/slyrozetoken" target="_blank" className="text-slyrozePink underline">Telegram Channel</a></li>
             <li>Submit your Wallet Address & Social Handles below</li>
             <li>Note: SLYROZE tokens will be distributed after official launch</li>
@@ -52,7 +52,7 @@ export default function Airdrop() {
           <p>&copy; 2025 Slyroze. All rights reserved.</p>
           <div className="flex justify-center gap-6 text-xl">
             <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition">Twitter</a>
-            <a href="https://t.me/slyroze" target="_blank" className="hover:text-neonGreen hover:scale-125 transition">Telegram Group</a>
+            <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition">Telegram Group</a>
             <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition">Telegram Channel</a>
           </div>
         </footer>
