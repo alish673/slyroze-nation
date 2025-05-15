@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useState } from 'react';
 
 export default function NationMapOverlay() {
@@ -8,14 +7,12 @@ export default function NationMapOverlay() {
     <div className="absolute inset-0 -z-50 w-full h-full pointer-events-none">
       {/* Nation PNG Map Background */}
       {!imageError ? (
-        <Image
-  <img src="/map.png" alt="Map Test" className="w-full h-auto" />
-  alt="Slyroze Nation Map"
-  width={1024}
-  height={1536}
-  className="w-full h-auto object-cover pointer-events-none"
-  priority
-/>
+        <img
+          src="/map.png?v=1"
+          alt="Slyroze Nation Map"
+          className="w-full h-auto object-cover pointer-events-none"
+          onError={() => setImageError(true)}
+        />
       ) : (
         <div className="absolute inset-0 bg-red-700 text-white flex items-center justify-center text-2xl font-bold">
           MAP NOT FOUND
