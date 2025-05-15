@@ -66,9 +66,11 @@ export default function Landing() {
               <Link href="/index" className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
                 Enter Nation
               </Link>
-              <Link href="/airdrop" className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
-                Claim Airdrop
-              </Link>
+              <Link href="/airdrop" passHref>
+  <a className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
+    Claim Airdrop
+  </a>
+</Link>
             </div>
             <div className="flex justify-center gap-6 mt-8 text-3xl">
               <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition-all"><FaTwitter /></a>
