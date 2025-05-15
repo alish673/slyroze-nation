@@ -9,7 +9,7 @@ export default function NationMapOverlay() {
       {/* Nation PNG Map Background */}
       {!imageError ? (
         <Image
-          src="/slyroze-nation-map.png"
+          src="/map.png"
           alt="Slyroze Nation Map"
           fill
           className="object-cover"
