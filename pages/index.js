@@ -44,7 +44,7 @@ export default function Landing() {
           <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
         <div className="flex justify-center pt-12">
-          <img src="/slyroze-main-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
+          <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
         </div>
 
         <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
