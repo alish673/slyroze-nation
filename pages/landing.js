@@ -86,7 +86,7 @@ export default function Landing() {
               </button>
               {showTokenomics && (
                 <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg">
-                  <h3 className="text-2xl font-bold text-neonPurple">SLY Token</h3>
+                  <h3 className="text-2xl font-bold text-neonPurple">SLYRoze Token (SLY)</h3>
                   <p>Total Supply: 100 Million SLY</p>
                   <p>1% Tax on each transaction</p>
                   <p>1% Burn on each transaction</p>
