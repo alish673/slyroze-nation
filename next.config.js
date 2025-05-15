@@ -7,19 +7,13 @@ const nextConfig = {
       'slyroze.com',        // Your domain
       'assets.coingecko.com', // Example for token logos
       'ipfs.io',              // Example for NFTs on IPFS
-      'your-image-cdn.com'    // Add your own if needed
     ],
   },
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/landing',
-        permanent: true,
-      },
-      {
         source: '/nation',
-        destination: '/nation.html',
+        destination: '/nation',  // Keep this for routing, no .html needed
         permanent: true,
       },
     ];
