@@ -14,7 +14,7 @@ export default function Landing() {
   return (
     <>
       <Head>
-        <title>Slyroze | Blockchain NFT Nation & SlyPass Token</title>
+        <title>Slyroze | NFT Nation & SlyPass Token</title>
         <meta name="description" content="Slyroze Nation - NFT land zones, SlyPass utility token, rewards & community-driven ownership." />
         <meta name="keywords" content="Slyroze, SlyPass, NFT Land, Crypto, Blockchain Nation, Token, Airdrop, Web3" />
         <meta name="robots" content="index, follow" />
@@ -45,7 +45,7 @@ export default function Landing() {
               Welcome to <span className="text-neonPurple drop-shadow-glow">Slyroze</span>
             </h1>
             <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed">
-              Redefining digital ownership with NFTs, SlyPass utility, and a community-driven blockchain Nation.
+              Digital ownership with NFTs, SlyPass utility, and a community-driven Nation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a href="https://pancakeswap.finance/" target="_blank" className="bg-neonGreen text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
