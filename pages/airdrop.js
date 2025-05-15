@@ -26,17 +26,18 @@ export default function Airdrop() {
             <li>Submit your Wallet Address & Social Handles below</li>
             <li>Note: SLYROZE tokens will be distributed after official launch</li>
           </ol>
-  <div className="mt-10 space-y-6">
+
+          <div className="mt-10 space-y-6">
             <h2 className="text-2xl font-semibold">Airdrop Submission Form</h2>
 
             {/* Embed Google Form */}
             <div className="relative overflow-hidden rounded-xl shadow-lg bg-gray-900 border border-gray-700">
               <iframe
-                src="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/viewform?embedded=true"
+                src="https://docs.google.com/forms/d/e/1FAIpQLScDN2yrj28NMoNCn3EDBUWuGfxz68bgWjWxrbfOcsALSol7jw/viewform?embedded=true"
                 width="100%"
-                height="700"
+                height="1511"
                 frameBorder="0"
-                className="w-full h-[700px]"
+                className="w-full h-[1511px]"
                 title="Slyroze Airdrop Form"
               >
                 Loading…
@@ -48,7 +49,8 @@ export default function Airdrop() {
             </p>
           </div>
         </main>
-  <footer className="mt-16 text-center text-gray-500 text-sm space-y-2">
+
+        <footer className="mt-16 text-center text-gray-500 text-sm space-y-2">
           <p>&copy; 2025 Slyroze. All rights reserved.</p>
           <div className="flex justify-center gap-6 text-xl">
             <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition">Twitter</a>
