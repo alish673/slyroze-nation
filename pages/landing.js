@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import Script from 'next/script';
 import { FaTelegram, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa';
 import HeroBackground from '../components/HeroBackground';
 import Header from '../components/Header';
-import AuthModal from '../components/AuthModal';
 
 export default function Landing() {
   const [showLitepaper, setShowLitepaper] = useState(false);
@@ -17,11 +17,23 @@ export default function Landing() {
         <title>Slyroze | Blockchain NFT Nation & SlyPass Token</title>
         <meta name="description" content="Slyroze Nation - NFT land zones, SlyPass utility token, rewards & community-driven ownership." />
         <meta name="keywords" content="Slyroze, SlyPass, NFT Land, Crypto, Blockchain Nation, Token, Airdrop, Web3" />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Slyroze Nation" />
         <meta property="og:description" content="Mint. Claim. Earn with SlyPass in the Slyroze Nation." />
         <meta property="og:image" content="/og-image.png" />
         <link rel="canonical" href="https://slyroze.com/" />
+        <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_CODE" />
       </Head>
+
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" />
+      <Script id="google-analytics">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XXXXXXXXXX');
+        `}
+      </Script>
 
       <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
         <HeroBackground />
@@ -51,7 +63,7 @@ export default function Landing() {
               <a href="https://slyroze.com" target="_blank" className="hover:text-neonPurple hover:scale-125 transition"><FaGlobe /></a>
             </div>
           </section>
-  <section className="space-y-10">
+<section className="space-y-10">
             <div className="space-y-4">
               <button onClick={() => setShowTokenomics(!showTokenomics)} className="w-full bg-gray-800 py-3 px-6 rounded shadow hover:bg-gray-700 transition text-left">
                 <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -136,8 +148,6 @@ export default function Landing() {
             </div>
           </footer>
         </main>
-
-        {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
       </div>
     </>
   );
