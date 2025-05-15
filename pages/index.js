@@ -19,7 +19,7 @@ import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { deleteUserAccount } from '../utils/deleteUser';
 
-export default function Home() {
+export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
   const [provider, setProvider] = useState(null);
@@ -44,7 +44,6 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
-
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -55,6 +54,7 @@ export default function Home() {
       setSlypBalance(balance);
     }
   };
+
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
@@ -64,7 +64,7 @@ export default function Home() {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
       setLoadingMessage("Minting Passport...");
-      await mintPassport(signer, walletAddress); // Uses new passport contract inside passport.js
+      await mintPassport(signer, walletAddress);
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
       alert("Passport Minted Successfully!");
@@ -94,7 +94,6 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
-
   const handleSetAlias = async (nickname) => {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
@@ -129,16 +128,15 @@ export default function Home() {
       setLoadingMessage("");
     }
   };
+
   return (
-    <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
-      <HeroBackground />
+    <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
+      <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6 relative z-10">
+        <h1 className="text-4xl font-bold">Slyroze Nation</h1>
+        <p>Claim zones, mint your passport, and earn SLYP rewards.</p>
 
-      <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6">
-        <h1 className="text-3xl font-bold">Welcome to Slyroze Nation</h1>
-        <p>Mint. Claim. Earn Monthly SLYP Rewards.</p>
-
-        <div className="flex justify-center space-x-4">
+        <div className="flex justify-center flex-wrap gap-4 mt-6">
           {user ? (
             <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
           ) : (
@@ -146,8 +144,7 @@ export default function Home() {
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
-
-        {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
+{walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
@@ -176,7 +173,8 @@ export default function Home() {
       {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
       {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
+
       <NationMapOverlay />
     </div>
   );
-    }
+            }
