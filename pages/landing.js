@@ -73,7 +73,7 @@ export default function Landing() {
               {showTokenomics && (
                 <div className="bg-gray-900 rounded p-4 text-gray-300 space-y-2">
                   <p>Total Supply: 100 Million SLY</p>
-                  <p>SlyPass Supply: 10,000</p>
+                  <p>SlyPass Supply: 1 Million SLYP</p>
                   <p>No taxes, fair distribution.</p>
                   <p>Designed for sustainable growth & community incentives.</p>
                 </div>
