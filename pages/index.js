@@ -44,6 +44,7 @@ export default function Home() {
     }
     loadLeaders();
   }, []);
+
   const handleConnectWallet = async () => {
     const result = await connectWallet();
     if (result) {
@@ -54,7 +55,6 @@ export default function Home() {
       setSlypBalance(balance);
     }
   };
-
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
@@ -64,7 +64,7 @@ export default function Home() {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
       setLoadingMessage("Minting Passport...");
-      await mintPassport(signer, walletAddress);
+      await mintPassport(signer, walletAddress); // Uses new passport contract inside passport.js
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
       alert("Passport Minted Successfully!");
