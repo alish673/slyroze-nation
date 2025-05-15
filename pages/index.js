@@ -37,21 +37,19 @@ export default function Landing() {
 
       <div className="relative min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white overflow-hidden">
         <HeroBackground />
-
-        {/* Logo Row */}
-        <div className="absolute top-4 left-4 flex items-center gap-4">
-          <img src="/logos/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-auto" />
-        </div>
-        <div className="absolute top-4 right-4 flex items-center gap-4">
-          <img src="/logos/slyroze-nation-logo.png" alt="Slyroze Nation Logo" className="h-10 w-auto" />
-        </div>
-        <div className="flex justify-center pt-4">
-          <img src="/logos/slyroze-main-logo.png" alt="Slyroze Logo" className="h-16 w-auto" />
-        </div>
-
         <Header />
 
-        <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
+        {/* Top Logos */}
+        <div className="absolute top-4 left-4 flex items-center gap-4">
+          <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-auto" />
+        </div>
+        <div className="absolute top-4 right-4 flex items-center gap-4">
+          <img src="/slyroze-nation-logo.png" alt="Slyroze Nation Logo" className="h-10 w-auto" />
+        </div>
+        <div className="flex justify-center pt-4">
+          <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-16 w-auto" />
+        </div>
+<main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
           <section className="space-y-8">
             <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
               Welcome to <span className="text-neonPurple drop-shadow-glow">Slyroze</span>
@@ -63,16 +61,12 @@ export default function Landing() {
               <a href="https://pancakeswap.finance/" target="_blank" className="bg-neonGreen text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
                 Buy on PancakeSwap
               </a>
-              <Link href="/nation">
-  <a className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
-    Enter Nation
-  </a>
-</Link>
-              <Link href="/airdrop" passHref>
-  <a className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
-    Claim Airdrop
-  </a>
-</Link>
+              <Link href="/index" className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
+                Enter Nation
+              </Link>
+              <Link href="/airdrop" className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
+                Claim Airdrop
+              </Link>
             </div>
             <div className="flex justify-center gap-6 mt-8 text-3xl">
               <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition-all"><FaTwitter /></a>
@@ -81,7 +75,9 @@ export default function Landing() {
               <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition-all"><FaInstagram /></a>
             </div>
           </section>
-<section className="space-y-10">
+
+          <section className="space-y-10">
+            {/* Tokenomics Section */}
             <div className="space-y-4">
               <button onClick={() => setShowTokenomics(!showTokenomics)} className="w-full bg-gray-800/80 backdrop-blur-md py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
                 <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -103,6 +99,7 @@ export default function Landing() {
               )}
             </div>
 
+            {/* Roadmap Section */}
             <div className="space-y-4">
               <button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 backdrop-blur-md py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
                 <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -119,6 +116,7 @@ export default function Landing() {
               )}
             </div>
 
+            {/* Litepaper Section */}
             <div className="space-y-4">
               <button onClick={() => setShowLitepaper(!showLitepaper)} className="w-full bg-gray-800/80 backdrop-blur-md py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
                 <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -133,8 +131,9 @@ export default function Landing() {
                 </div>
               )}
             </div>
-          </section>
+</section>
 
+          {/* Meme Tracker Section */}
           <section className="space-y-10">
             <h2 className="text-3xl font-semibold">Meme Tracker (Instagram Latest)</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -146,7 +145,9 @@ export default function Landing() {
             </div>
             <p className="text-sm text-gray-400">Follow us on Instagram for the latest community memes and moments.</p>
           </section>
-<section className="space-y-10">
+
+          {/* Get Involved Section */}
+          <section className="space-y-10">
             <h2 className="text-3xl font-semibold">Get Involved</h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link href="/index" className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow hover:scale-105 transition">
@@ -163,23 +164,24 @@ export default function Landing() {
               </a>
             </div>
           </section>
-
-          <footer className="text-center text-sm text-gray-500 mt-16 space-y-2">
-            <div className="flex justify-center items-center gap-6 mb-4">
-              <img src="/logos/slypass.png" alt="SlyPass Logo" className="h-10 w-auto" />
-              <img src="/logos/slyroze-main.png" alt="Slyroze Logo" className="h-14 w-auto" />
-              <img src="/logos/nation.png" alt="Slyroze Nation Logo" className="h-10 w-auto" />
-            </div>
-            <p>&copy; 2025 Slyroze. All rights reserved.</p>
-            <div className="flex justify-center gap-6 mt-2 text-2xl">
-              <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
-              <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
-              <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
-              <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
-            </div>
-          </footer>
         </main>
+
+        {/* Footer with Logos */}
+        <footer className="text-center text-sm text-gray-500 mt-16 space-y-2">
+          <div className="flex justify-center items-center gap-6 mb-4">
+            <img src="/logos/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-auto" />
+            <img src="/logos/slyroze-main-logo.png" alt="Slyroze Logo" className="h-14 w-auto" />
+            <img src="/logos/slyroze-nation-logo.png" alt="Slyroze Nation Logo" className="h-10 w-auto" />
+          </div>
+          <p>&copy; 2025 Slyroze. All rights reserved.</p>
+          <div className="flex justify-center gap-6 mt-2 text-2xl">
+            <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
+            <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
+            <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
+            <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
+          </div>
+        </footer>
       </div>
     </>
   );
-              }
+            }
