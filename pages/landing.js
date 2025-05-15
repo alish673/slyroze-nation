@@ -13,102 +13,103 @@ export default function Landing() {
       <HeroBackground />
       <Header />
 
-      <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-10">
-        <section className="space-y-6">
-          <h1 className="text-4xl sm:text-5xl font-bold">Welcome to Slyroze</h1>
-          <p className="max-w-xl mx-auto text-gray-300">
-            A blockchain-powered ecosystem redefining digital ownership. Explore, earn, and grow with Slyroze Nation and the SlyPass utility token.
+      <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-14">
+        <section className="space-y-6 pt-10">
+          <h1 className="text-5xl font-bold">Welcome to <span className="text-neonPurple">Slyroze</span></h1>
+          <p className="max-w-2xl mx-auto text-lg text-gray-300">
+            Redefining digital ownership with NFTs, land zones, SlyPass utility, and community-driven rewards.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="https://pancakeswap.finance/" target="_blank" rel="noopener noreferrer" className="bg-neonGreen text-black py-2 px-6 rounded shadow hover:scale-105 transition">
+            <a href="https://pancakeswap.finance/" target="_blank" rel="noopener noreferrer" className="bg-neonGreen text-black py-3 px-6 rounded shadow hover:scale-105 transition">
               Buy on PancakeSwap
             </a>
-            <a href="https://t.me/slyroze" target="_blank" rel="noopener noreferrer" className="bg-slyrozePink text-white py-2 px-6 rounded shadow hover:scale-105 transition">
-              Join the Community
+            <a href="https://t.me/slyroze" target="_blank" rel="noopener noreferrer" className="bg-slyrozePink text-white py-3 px-6 rounded shadow hover:scale-105 transition">
+              Join Telegram
+            </a>
+            <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white py-3 px-6 rounded shadow hover:scale-105 transition">
+              Follow on Twitter
+            </a>
+            <a href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white py-3 px-6 rounded shadow hover:scale-105 transition">
+              Instagram
             </a>
           </div>
         </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">SlyPass & Slyroze Token</h2>
-          <p className="max-w-xl mx-auto text-gray-300">
-            SlyPass (SLYP) fuels interactions within Slyroze Nation — from minting passports to claiming land zones. Slyroze Token (SLY) rewards contributors and supports ecosystem growth.
-          </p>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">Ecosystem & Utility</h2>
-          <p className="max-w-xl mx-auto text-gray-300">
-            Slyroze Nation offers land zones as NFTs, leaderboards, and dynamic airdrops. Engage, climb the ranks, and own digital territory with real utility.
-          </p>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">Tokenomics</h2>
-          <p className="max-w-xl mx-auto text-gray-300">
-            Total Supply: 100 Million SLY | 10,000 SlyPass | No taxes, fair distribution. Designed for sustainable growth and community incentives.
-          </p>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">Roadmap Highlights</h2>
-          <ul className="max-w-xl mx-auto text-left text-gray-300 list-disc list-inside space-y-2">
-            <li>Phase 1: Token Launch & Community Building</li>
-            <li>Phase 2: Slyroze Nation Interactive Map & NFT Land Claims</li>
-            <li>Phase 3: SlyPass Minting & Airdrops</li>
-            <li>Phase 4: Marketplace & UBI Features</li>
-          </ul>
-        </section>
-  <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">Litepaper</h2>
-          <button
-            onClick={() => setShowLitepaper(!showLitepaper)}
-            className="bg-slyrozeBlue text-black py-2 px-6 rounded shadow hover:scale-105 transition"
-          >
-            {showLitepaper ? 'Hide Litepaper' : 'View Litepaper'}
-          </button>
-          {showLitepaper && (
-            <div className="max-w-2xl mx-auto bg-gray-900 p-4 rounded shadow text-left text-gray-300 space-y-2">
-              <p>Slyroze Litepaper outlines the full ecosystem, token utility, roadmap, and vision for decentralized digital ownership.</p>
-              <p>Focus areas include land NFT zones, community rewards, SlyPass integration, and long-term sustainability.</p>
-              <p>Download full version: <a href="/litepaper.pdf" className="underline text-neonPurple" target="_blank">Litepaper PDF</a></p>
-            </div>
-          )}
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">How to Buy SLY & SlyPass</h2>
+  <section className="space-y-10">
+          <h2 className="text-3xl font-semibold">Explore the Slyroze Ecosystem</h2>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="https://pancakeswap.finance/swap?outputCurrency=0x8E750e6E68f1378fEe36fEb74d8d28818b3B37b7" target="_blank" rel="noopener noreferrer" className="bg-neonGreen text-black py-2 px-6 rounded shadow hover:scale-105 transition">
-              Buy SlyPass on PancakeSwap
-            </a>
-            <a href="https://pancakeswap.finance/swap?outputCurrency=SLY" target="_blank" rel="noopener noreferrer" className="bg-slyrozePink text-white py-2 px-6 rounded shadow hover:scale-105 transition">
-              Buy SLY Token
-            </a>
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="text-3xl font-semibold">Get Involved</h2>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/nation" className="bg-slyrozeBlue text-black py-2 px-6 rounded shadow hover:scale-105 transition">
+            <Link href="/nation" className="bg-slyrozeBlue text-black py-3 px-6 rounded shadow hover:scale-105 transition">
               Enter Slyroze Nation
             </Link>
-            <Link href="/airdrop" className="bg-yellow-400 text-black py-2 px-6 rounded shadow hover:scale-105 transition">
+            <Link href="/airdrop" className="bg-yellow-400 text-black py-3 px-6 rounded shadow hover:scale-105 transition">
               Claim Airdrop
             </Link>
-            <a href="https://t.me/slyroze" target="_blank" rel="noopener noreferrer" className="bg-purple-600 text-white py-2 px-6 rounded shadow hover:scale-105 transition">
-              Join Telegram Community
+            <a href="/litepaper.pdf" target="_blank" className="bg-neonPurple text-white py-3 px-6 rounded shadow hover:scale-105 transition">
+              View Litepaper
             </a>
           </div>
         </section>
 
-        <footer className="text-sm text-gray-500 mt-10">
-          &copy; 2025 Slyroze. All rights reserved.
+        <section className="space-y-6">
+          <h2 className="text-3xl font-semibold">Meme Tracker (Latest Instagram)</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((item) => (
+              <a key={item} href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="block rounded overflow-hidden shadow hover:scale-105 transition">
+                <img src={`/memes/meme-${item}.jpg`} alt={`Meme ${item}`} className="w-full h-auto object-cover" />
+              </a>
+            ))}
+          </div>
+          <p className="text-sm text-gray-400">Follow us on Instagram for the latest memes and community updates.</p>
+        </section>
+
+        <footer className="text-center text-sm text-gray-500 mt-16 space-y-2">
+          <p>&copy; 2025 Slyroze. All rights reserved.</p>
+          <div className="flex justify-center gap-6 mt-2">
+            <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink">Twitter</a>
+            <a href="https://t.me/slyroze" target="_blank" className="hover:text-neonGreen">Telegram Group</a>
+            <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400">Telegram Channel</a>
+            <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300">Instagram</a>
+          </div>
         </footer>
       </main>
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </div>
   );
-          }
+    }
+import Head from 'next/head';
+
+export default function Landing() {
+  const [showLitepaper, setShowLitepaper] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  return (
+    <>
+      <Head>
+        <title>Slyroze | Blockchain NFT Nation & SlyPass Token</title>
+        <meta name="description" content="Slyroze Nation - Explore digital land zones, mint NFTs, earn rewards with SlyPass token. Join our ecosystem today." />
+        <meta name="keywords" content="Slyroze, SlyPass, NFT Land, Crypto, Blockchain Nation, Token, Airdrop, Web3" />
+        <meta property="og:title" content="Slyroze Nation" />
+        <meta property="og:description" content="Mint. Claim. Earn with SlyPass in the Slyroze Nation." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:url" content="https://slyroze.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="canonical" href="https://slyroze.com/" />
+        <meta name="robots" content="index, follow" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Slyroze",
+              "url": "https://slyroze.com",
+              "logo": "https://slyroze.com/logo.png",
+              "sameAs": [
+                "https://www.instagram.com/slyroze",
+                "https://x.com/slyroze",
+                "https://t.me/slyroze"
+              ],
+              "description": "Slyroze is a blockchain-powered Nation offering NFT land zones, community rewards, and SlyPass token utility."
+            }
+          `}
+        </script>
+      </Head>
