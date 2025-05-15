@@ -1,6 +1,9 @@
 import { ethers } from "ethers";
 
-const PASSPORT_CONTRACT_ADDRESS = "0xf120600666c2C2663EC0cDfBB53B1c1a82E4feF3";
+// Updated Passport Contract Address
+const PASSPORT_CONTRACT_ADDRESS = "0xfd3BC111A9f4A0d86875f6B4Ca4Df592179CE0ca";
+
+// SLYP Contract remains the same
 const SLYP_CONTRACT_ADDRESS = "0x8E750e6E68f1378fEe36fEb74d8d28818b3B37b7";
 
 const SLYP_ABI = [
@@ -17,6 +20,7 @@ const PASSPORT_ABI = [
 export async function mintPassport(signer, userAddress) {
   const slyp = new ethers.Contract(SLYP_CONTRACT_ADDRESS, SLYP_ABI, signer);
   const passport = new ethers.Contract(PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI, signer);
+
   const cost = ethers.utils.parseUnits("200", 18);
 
   const allowance = await slyp.allowance(userAddress, PASSPORT_CONTRACT_ADDRESS);
