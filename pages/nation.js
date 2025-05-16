@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { auth } from '../utils/firebase';
+import { collection, getDocs } from "firebase/firestore";
+import { auth, db } from '../utils/firebase';
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
 import NationMapOverlay from '../components/NationMapOverlay';
@@ -18,6 +19,7 @@ import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { deleteUserAccount } from '../utils/deleteUser';
+import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -31,6 +33,8 @@ export default function Nation() {
   const [showAboutPanel, setShowAboutPanel] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [showHowNationWorks, setShowHowNationWorks] = useState(false);
+  const [stats, setStats] = useState({ users: 0, zones: 0, passports: 0 });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -42,7 +46,18 @@ export default function Nation() {
       const data = await getLeaderboard();
       setLeaderboard(data);
     }
+    async function loadStats() {
+      const usersSnap = await getDocs(collection(db, "users"));
+      const zonesSnap = await getDocs(collection(db, "claimed_zones"));
+      const passportsSnap = await getDocs(collection(db, "passports"));
+      setStats({
+        users: usersSnap.size,
+        zones: zonesSnap.size,
+        passports: passportsSnap.size
+      });
+    }
     loadLeaders();
+    loadStats();
   }, []);
   const handleConnectWallet = async () => {
     const result = await connectWallet();
@@ -94,6 +109,7 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
+
   const handleSetAlias = async (nickname) => {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
@@ -159,7 +175,55 @@ export default function Nation() {
           <button onClick={handleClaimZone} className="bg-neonGreen text-black py-2 px-4 rounded shadow-neon">Claim Zone</button>
         </div>
 
-        <Leaderboard data={leaderboard} />
+        {/* How Nation Works Section */}
+        <section className="mt-10">
+          <button onClick={() => setShowHowNationWorks(!showHowNationWorks)} className="bg-gray-800 py-3 px-6 rounded-lg hover:bg-gray-700 transition text-xl font-semibold">
+            How Nation Works {showHowNationWorks ? '▲' : '▼'}
+          </button>
+          {showHowNationWorks && (
+            <div className="mt-4 bg-gray-900 text-left p-6 rounded-lg space-y-3 text-sm text-gray-300">
+              <p>Slyroze Nation is a gamified digital territory where users can claim land zones, mint NFT passports, and earn rewards using SLYP tokens.</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li>Login & connect wallet to begin.</li>
+                <li>Claim unique zones using SlyPass tokens.</li>
+                <li>Each claim is recorded on-chain and in Firestore.</li>
+                <li>Top holders and contributors are ranked in real-time.</li>
+                <li>Mint a passport NFT to unlock more ecosystem perks.</li>
+              </ul>
+            </div>
+          )}
+        </section>
+
+        {/* Real-time stats */}
+        <section className="mt-10 text-gray-300">
+          <h2 className="text-2xl font-semibold mb-4">Nation Stats</h2>
+          <div className="flex flex-wrap justify-center gap-6">
+            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
+              <p className="text-3xl font-bold">{stats.users}</p>
+              <p>Active Users</p>
+            </div>
+            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
+              <p className="text-3xl font-bold">{stats.zones}</p>
+              <p>Claimed Zones</p>
+            </div>
+            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
+              <p className="text-3xl font-bold">{stats.passports}</p>
+              <p>Passports Minted</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Top 5 Zone Holders Leaderboard */}
+        <Leaderboard data={leaderboard.slice(0, 5)} />
+
+        {/* Social Icons above map */}
+        <div className="flex justify-center gap-6 text-2xl my-8">
+          <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
+          <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
+          <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
+          <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
+        </div>
+
         <ZoneGrid signer={signer} walletAddress={walletAddress} />
       </main>
 
@@ -174,7 +238,8 @@ export default function Nation() {
       {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
 
-      <NationMapOverlay />
+      {/* Fixed map path */}
+      <NationMapOverlay imagePath="/map.png" />
     </div>
   );
-            }
+                                                                        }
