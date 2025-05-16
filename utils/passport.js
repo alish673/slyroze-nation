@@ -1,15 +1,13 @@
-import { ethers } from "ethers"; // Required
-
+import { ethers } from "ethers";
 import { SLYP_CONTRACT_ADDRESS, SLYP_ABI } from './slyp';
 
-// Replace these with your actual deployed Passport contract details
+// Replace with your real contract address
 const PASSPORT_CONTRACT_ADDRESS = "0xYourPassportContractAddressHere";
+
+// Minimal ABI for minting and catching Transfer event
 const PASSPORT_ABI = [
-  // Paste your actual Passport ABI array here
   {
-    "inputs": [
-      { "internalType": "address", "name": "to", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
     "name": "mintPassport",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -47,22 +45,37 @@ export async function mintPassport(signer, userAddress) {
     const mintTx = await passport.mintPassport(userAddress);
     const receipt = await mintTx.wait();
 
-    const transferEvent = receipt.events.find(e => e.event === "Transfer");
-    const tokenId = transferEvent?.args?.tokenId?.toString();
+    let tokenId = null;
 
-    const burnTx = await slyp.burn(burnAmount);
-    await burnTx.wait();
+    if (receipt?.events?.length > 0) {
+      const transferEvent = receipt.events.find(e => e.event === "Transfer");
+      tokenId = transferEvent?.args?.tokenId?.toString();
+    }
+
+    if (!tokenId) {
+      console.warn("Transfer event not found or tokenId missing in receipt");
+    }
+
+    // Optional burn if desired
+    if (slyp.burn) {
+      try {
+        const burnTx = await slyp.burn(burnAmount);
+        await burnTx.wait();
+      } catch (burnError) {
+        console.warn("Burn failed:", burnError);
+      }
+    }
 
     if (tokenId) {
       alert(`Passport Minted Successfully! Token ID: #${tokenId}`);
     } else {
-      alert("Passport Minted Successfully (but Token ID not found in event)");
+      alert("Passport Minted Successfully (Token ID not found in event)");
     }
 
     return tokenId;
   } catch (err) {
     console.error("Mint failed:", err);
-    alert("Minting failed: " + err.message);
+    alert("Minting failed: " + (err?.message || "Unknown error"));
     throw err;
   }
 }
