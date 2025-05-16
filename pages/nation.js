@@ -135,22 +135,7 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-  const handleMintPassport = async () => {
-  if (!signer || !walletAddress) return alert("Connect Wallet first.");
-  if (passportId) return alert("You already have a Passport.");
-  try {
-    setLoadingMessage("Minting Passport...");
-    const tokenId = await mintPassport(signer, walletAddress, user?.uid);
-    const balance = await getSlypBalance(provider, walletAddress);
-    setSlypBalance(balance);
-    if (user) await fetchPassport(user.uid);
-  } catch (err) {
-    alert("Minting failed: " + err.message);
-  } finally {
-    setLoadingMessage("");
-  }
-};
-
+  
   const handleSetAlias = async (nickname) => {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
