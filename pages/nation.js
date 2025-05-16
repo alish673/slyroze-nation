@@ -82,38 +82,17 @@ const handleConnectWallet = async () => { const result = await connectWallet(); 
           </div>
         </section>
 
-        {/* Top 5 Zone Holders */}
-        <Leaderboard data={leaderboard.slice(0, 5)} />
+        <>
+  {/* Top 5 Zone Holders */}
+  <Leaderboard data={leaderboard.slice(0, 5)} />
 
-        {/* Social Icons */}
-        <div className="flex justify-center gap-6 text-2xl my-8">
-          <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
-          <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
-          <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
-          <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
-        </div>
+  {/* Social Icons */}
+  <div className="flex justify-center gap-6 text-2xl my-8">
+    <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
+    <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
+    <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
+    <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
+  </div>
 
-        <ZoneGrid signer={signer} walletAddress={walletAddress} />
-      </main>
-{loadingMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <p className="text-xl text-white animate-pulse">{loadingMessage}</p>
-        </div>
-      )}
-
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-      {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
-      {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
-      {showNicknameModal && (
-        <NicknameModal
-          isOpen={showNicknameModal}
-          onClose={() => setShowNicknameModal(false)}
-          onSave={handleSetAlias}
-        />
-      )}
-
-      {/* Map Background Overlay */}
-      <NationMapOverlay />
-    </div>
-  );
-                  }
+  <ZoneGrid signer={signer} walletAddress={walletAddress} />
+</>
