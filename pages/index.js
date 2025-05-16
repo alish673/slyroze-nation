@@ -10,7 +10,7 @@ export default function Landing() {
   const [showLitepaper, setShowLitepaper] = useState(false);
   const [showRoadmap, setShowRoadmap] = useState(false);
   const [showTokenomics, setShowTokenomics] = useState(false);
-  const [showWhySlyroze, setShowWhySlyroze] = useState(false);
+  const [showWhy, setShowWhy] = useState(false);
 
   return (
     <>
@@ -37,7 +37,7 @@ export default function Landing() {
         <HeroBackground />
         <Header />
 
-        {/* Logos */}
+        {/* Logo Row */}
         <div className="absolute top-4 left-4 flex items-center gap-2">
           <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
@@ -46,6 +46,14 @@ export default function Landing() {
         </div>
         <div className="flex justify-center pt-12">
           <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
+        </div>
+
+        {/* Top Social Media Icons */}
+        <div className="absolute top-4 inset-x-0 flex justify-center gap-6 text-xl z-50">
+          <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
+          <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" rel="noopener noreferrer" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
+          <a href="https://t.me/slyrozetoken" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
+          <a href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
         </div>
 
         <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
@@ -76,47 +84,32 @@ export default function Landing() {
 
           {/* Ecosystem Map */}
           <section className="space-y-10">
-            <h2 className="text-3xl font-semibold">Slyroze Ecosystem Map</h2>
-            <img src="/ecosystem.png" alt="Ecosystem Map" className="w-full max-w-4xl mx-auto rounded-xl shadow-xl" />
+            <h2 className="text-3xl font-semibold">Slyroze Ecosystem</h2>
+            <div className="rounded-xl overflow-hidden shadow-xl border border-gray-700">
+              <img src="/ecosystem.png" alt="Slyroze Ecosystem Map" className="w-full object-cover" />
+            </div>
           </section>
-
-          {/* Why Choose Slyroze Accordion */}
-          <section className="space-y-10">
-            <button onClick={() => setShowWhySlyroze(!showWhySlyroze)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
+{/* Why Choose Slyroze Section */}
+          <section className="space-y-6">
+            <button onClick={() => setShowWhy(!showWhy)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
-                Why Choose Slyroze <span>{showWhySlyroze ? '-' : '+'}</span>
+                Why Choose Slyroze <span>{showWhy ? '-' : '+'}</span>
               </h2>
             </button>
-            {showWhySlyroze && (
+            {showWhy && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg text-left">
-                <p>Verified smart contracts ensure transparency and trust.</p>
-                <p>LP Lock & Ownership Renouncement planned post-launch for community safety.</p>
-                <p>Fully decentralized ownership via NFT land zones & SlyPass utility.</p>
-                <p>Innovative UBI rewards & marketplace integration.</p>
+                <ul className="list-disc list-inside space-y-2">
+                  <li>Community-driven blockchain ecosystem</li>
+                  <li>Utility-backed NFT minting via SlyPass</li>
+                  <li>Real-time land ownership and interactive maps</li>
+                  <li>UBI & fair airdrops to all participants</li>
+                  <li>Transparent, auditable token contracts</li>
+                </ul>
               </div>
             )}
           </section>
 
-          {/* Badges */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-semibold">Security & Trust</h2>
-            <div className="flex flex-wrap justify-center gap-6">
-              <div className="bg-gray-800/80 py-4 px-6 rounded-xl shadow-xl text-center">
-                <h3 className="text-xl font-bold text-neonPurple">Verified Contract</h3>
-              </div>
-              <div className="bg-gray-800/80 py-4 px-6 rounded-xl shadow-xl text-center">
-                <h3 className="text-xl font-bold text-yellow-400">LP Locked (Coming Soon)</h3>
-              </div>
-              <div className="bg-gray-800/80 py-4 px-6 rounded-xl shadow-xl text-center">
-                <h3 className="text-xl font-bold text-slyrozeBlue">Ownership Renounced (Coming Soon)</h3>
-              </div>
-              <div className="bg-gray-800/80 py-4 px-6 rounded-xl shadow-xl text-center">
-                <h3 className="text-xl font-bold text-gray-400">Infrastructure & Liquidity Lock (Coming Soon)</h3>
-              </div>
-            </div>
-          </section>
-
-          {/* Tokenomics Accordion */}
+          {/* Tokenomics Section */}
           <section className="space-y-10">
             <button onClick={() => setShowTokenomics(!showTokenomics)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -127,15 +120,16 @@ export default function Landing() {
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg">
                 <h3 className="text-2xl font-bold text-neonPurple">SlyRoze Token (SLY)</h3>
                 <p>Total Supply: 100 Million SLY</p>
-                <p>1% Tax, 1% Burn per transaction</p>
-                <h3 className="text-2xl font-bold text-slyrozeBlue mt-4">SlyPass Token (SLYP)</h3>
+                <p>1% Tax on each transaction</p>
+                <p>1% Burn on each transaction</p>
+                <hr className="my-4 border-gray-700" />
+                <h3 className="text-2xl font-bold text-slyrozeBlue">SlyPass Token (SLYP)</h3>
                 <p>Supply: 1 Million SLYP</p>
-                <p>No taxes, pure utility for NFTs & claiming zones.</p>
+                <p>No taxes, no burns, direct utility for NFT minting & zone claiming.</p>
               </div>
             )}
-          </section>
-{/* Roadmap Accordion */}
-          <section className="space-y-10">
+
+            {/* Roadmap Accordion */}
             <button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Roadmap <span>{showRoadmap ? '-' : '+'}</span>
@@ -143,16 +137,14 @@ export default function Landing() {
             </button>
             {showRoadmap && (
               <ul className="bg-gray-900/90 rounded-xl p-6 text-gray-300 list-disc list-inside space-y-3 shadow-lg text-left">
-                <li>Phase 1: Token Launch & Community Growth</li>
-                <li>Phase 2: NFT Land Zones & Interactive Map</li>
-                <li>Phase 3: SlyPass Minting & Airdrop Distribution</li>
-                <li>Phase 4: UBI & Marketplace Features</li>
+                <li>Phase 1: Token Launch & Community Building</li>
+                <li>Phase 2: Interactive Nation Map & NFT Land Claims</li>
+                <li>Phase 3: SlyPass Minting & Airdrops</li>
+                <li>Phase 4: Marketplace & UBI Features</li>
               </ul>
             )}
-          </section>
 
-          {/* Litepaper Accordion */}
-          <section className="space-y-10">
+            {/* Litepaper Accordion */}
             <button onClick={() => setShowLitepaper(!showLitepaper)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Litepaper <span>{showLitepaper ? '-' : '+'}</span>
@@ -160,14 +152,24 @@ export default function Landing() {
             </button>
             {showLitepaper && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg text-left">
-                <p>Slyroze Litepaper outlines the ecosystem, token utility, roadmap, and vision for decentralized ownership.</p>
-                <p>Focus: NFT zones, community rewards, SlyPass integration, and growth strategy.</p>
+                <p>The Slyroze Litepaper covers our full vision, ecosystem, roadmap and token utility.</p>
+                <p>Includes: NFT zone logic, Passport system, token flows, and UBI mechanics.</p>
                 <p>Download: <a href="/litepaper.pdf" className="underline text-neonPurple" target="_blank">Litepaper PDF</a></p>
               </div>
             )}
           </section>
 
-          {/* Meme Tracker */}
+          {/* Trust Badges */}
+          <section className="space-y-6">
+            <h2 className="text-2xl font-semibold text-center">Verified & Secure</h2>
+            <div className="flex justify-center flex-wrap gap-4 text-sm text-gray-300">
+              <span className="bg-green-700/60 px-4 py-2 rounded-full">Contract Verified</span>
+              <span className="bg-yellow-600/60 px-4 py-2 rounded-full">Liquidity Lock (coming soon)</span>
+              <span className="bg-blue-600/60 px-4 py-2 rounded-full">Ownership Renounced (planned)</span>
+              <span className="bg-purple-600/60 px-4 py-2 rounded-full">Infrastructure Lock (soon)</span>
+            </div>
+          </section>
+{/* Meme Tracker */}
           <section className="space-y-10">
             <h2 className="text-3xl font-semibold">Meme Tracker (Instagram Latest)</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -180,7 +182,7 @@ export default function Landing() {
             <p className="text-sm text-gray-400">Follow us on Instagram for latest memes & updates.</p>
           </section>
 
-          {/* Get Involved Section */}
+          {/* Get Involved */}
           <section className="space-y-10">
             <h2 className="text-3xl font-semibold">Get Involved</h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -198,29 +200,9 @@ export default function Landing() {
               </a>
             </div>
           </section>
-{/* Security & Trust Badges */}
-          <section className="space-y-10 mt-12">
-            <h2 className="text-3xl font-semibold">Why Choose Slyroze</h2>
-            <div className="bg-gray-900/80 rounded-xl p-6 text-gray-300 shadow-lg space-y-4">
-              <p>Slyroze combines NFT land zones, utility tokens, and community governance for true digital ownership.</p>
-              <ul className="list-disc list-inside space-y-2">
-                <li>Verified Smart Contracts</li>
-                <li>Liquidity Lock (Coming Soon)</li>
-                <li>Ownership Renounced (Coming Soon)</li>
-                <li>Community-driven Nation Building</li>
-                <li>Transparent Roadmap & Tokenomics</li>
-              </ul>
-              <div className="flex justify-center gap-4 mt-6">
-                <span className="bg-green-600 text-white px-4 py-2 rounded-full shadow">Verified Contract</span>
-                <span className="bg-yellow-500 text-black px-4 py-2 rounded-full shadow">LP Locked</span>
-                <span className="bg-gray-600 text-white px-4 py-2 rounded-full shadow">Renounced Ownership</span>
-              </div>
-              <p className="text-sm text-gray-500 mt-4">Infrastructure & Liquidity Lock (Coming Soon)</p>
-            </div>
-          </section>
 
-          {/* Footer Section */}
-          <footer className="text-center text-sm text-gray-500 mt-16 space-y-6">
+          {/* Footer with Logos */}
+          <footer className="text-center text-sm text-gray-500 mt-16 space-y-4">
             <div className="flex justify-center items-center gap-6">
               <div className="bg-gray-800/80 p-2 rounded-lg">
                 <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-auto" />
