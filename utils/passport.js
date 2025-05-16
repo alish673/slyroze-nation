@@ -4,7 +4,6 @@ import { SLYP_CONTRACT_ADDRESS, SLYP_ABI } from './slyp';
 // Replace with your real contract address
 const PASSPORT_CONTRACT_ADDRESS = "0xYourPassportContractAddressHere";
 
-// Minimal ABI for minting and catching Transfer event
 const PASSPORT_ABI = [
   {
     "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
@@ -45,9 +44,10 @@ export async function mintPassport(signer, userAddress) {
     const mintTx = await passport.mintPassport(userAddress);
     const receipt = await mintTx.wait();
 
-    let tokenId = null;
+    console.log("Mint receipt:", receipt);  // Helpful debug log
 
-    if (receipt?.events?.length > 0) {
+    let tokenId = null;
+    if (Array.isArray(receipt?.events)) {
       const transferEvent = receipt.events.find(e => e.event === "Transfer");
       tokenId = transferEvent?.args?.tokenId?.toString();
     }
@@ -56,7 +56,6 @@ export async function mintPassport(signer, userAddress) {
       console.warn("Transfer event not found or tokenId missing in receipt");
     }
 
-    // Optional burn if desired
     if (slyp.burn) {
       try {
         const burnTx = await slyp.burn(burnAmount);
