@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { signOut, onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import { signOut, onAuthStateChanged, deleteUser } from "firebase/auth";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from '../utils/firebase';
 import Header from '../components/Header';
 import HeroBackground from '../components/HeroBackground';
@@ -18,7 +18,6 @@ import { mintPassport } from '../utils/passport';
 import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
-import { deleteUserAccount } from '../utils/deleteUser';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 export default function Nation() {
@@ -133,9 +132,8 @@ export default function Nation() {
     try {
       setLoadingMessage("Deleting Account...");
       if (!user) return alert("Login required.");
-      await deleteUserAccount(user.uid);
-      const data = await getLeaderboard();
-      setLeaderboard(data);
+      await deleteDoc(doc(db, "users", user.uid));
+      await deleteUser(user);
       alert("Account deleted.");
     } catch (err) {
       console.error(err);
@@ -144,7 +142,6 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
@@ -160,7 +157,8 @@ export default function Nation() {
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
-{walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
+
+        {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
@@ -194,7 +192,7 @@ export default function Nation() {
           )}
         </section>
 
-        {/* Real-time stats */}
+        {/* Real-time Nation Stats */}
         <section className="mt-10 text-gray-300">
           <h2 className="text-2xl font-semibold mb-4">Nation Stats</h2>
           <div className="flex flex-wrap justify-center gap-6">
@@ -213,10 +211,10 @@ export default function Nation() {
           </div>
         </section>
 
-        {/* Top 5 Zone Holders Leaderboard */}
+        {/* Top 5 Zone Holders */}
         <Leaderboard data={leaderboard.slice(0, 5)} />
 
-        {/* Social Icons above map */}
+        {/* Social Icons */}
         <div className="flex justify-center gap-6 text-2xl my-8">
           <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
           <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
@@ -238,8 +236,8 @@ export default function Nation() {
       {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
 
-      {/* Fixed map path */}
+      {/* Fixed map image path */}
       <NationMapOverlay imagePath="/map.png" />
     </div>
   );
-                                                                        }
+            }
