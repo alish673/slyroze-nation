@@ -135,23 +135,21 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-  const handleClaimZone = async () => {
-    if (!signer || !walletAddress) return alert("Connect Wallet first.");
-    try {
-      const zoneId = prompt("Enter Zone ID to claim (e.g., zone-000001):");
-      if (!zoneId) return;
-      const slypPrice = 50;
-      setLoadingMessage(`Claiming ${zoneId}...`);
-      const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
-      alert(result);
-      const updatedLeaderboard = await getLeaderboard();
-      setLeaderboard(updatedLeaderboard);
-    } catch (err) {
-      alert("Claim failed: " + err.message);
-    } finally {
-      setLoadingMessage("");
-    }
-  };
+  const handleMintPassport = async () => {
+  if (!signer || !walletAddress) return alert("Connect Wallet first.");
+  if (passportId) return alert("You already have a Passport.");
+  try {
+    setLoadingMessage("Minting Passport...");
+    const tokenId = await mintPassport(signer, walletAddress, user?.uid);
+    const balance = await getSlypBalance(provider, walletAddress);
+    setSlypBalance(balance);
+    if (user) await fetchPassport(user.uid);
+  } catch (err) {
+    alert("Minting failed: " + err.message);
+  } finally {
+    setLoadingMessage("");
+  }
+};
 
   const handleSetAlias = async (nickname) => {
     if (!walletAddress) return alert("Connect Wallet first.");
