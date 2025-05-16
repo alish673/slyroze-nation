@@ -35,6 +35,7 @@ export default function Nation() {
   const [stats, setStats] = useState({ users: 0, zones: 0, passports: 0 });
   const [passportId, setPassportId] = useState(null);
   const [passportImage, setPassportImage] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
@@ -61,7 +62,6 @@ export default function Nation() {
     loadLeaders();
     loadStats();
   }, []);
-
   const handleConnectWallet = async () => {
     try {
       if (!window.ethereum) throw new Error("MetaMask not found");
@@ -113,7 +113,8 @@ export default function Nation() {
       setPassportId(null);
       setPassportImage(null);
     }
-      }
+  }
+
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
@@ -124,7 +125,7 @@ export default function Nation() {
     if (passportId) return alert("You already have a Passport.");
     try {
       setLoadingMessage("Minting Passport...");
-      const tokenId = await mintPassport(signer, walletAddress, user.uid);
+      const tokenId = await mintPassport(signer, walletAddress, user?.uid);
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
       if (user) await fetchPassport(user.uid);
@@ -134,7 +135,6 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -199,9 +199,9 @@ export default function Nation() {
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
+{walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
-        {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
-{user && (
+        {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
             {passportImage ? (
@@ -304,6 +304,7 @@ export default function Nation() {
           onSave={handleSetAlias}
         />
       )}
+
       <NationMapOverlay />
     </div>
   );
