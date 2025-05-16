@@ -93,15 +93,22 @@ export default function Nation() {
         const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
         if (res.ok) {
           const data = await res.json();
-          setPassportImage(data.image);
+          if (data && data.image) {
+            setPassportImage(data.image);
+          } else {
+            console.warn("Metadata missing image field:", data);
+            setPassportImage(null);
+          }
         } else {
+          console.warn("Metadata fetch failed:", res.status);
           setPassportImage(null);
         }
       } else {
         setPassportId(null);
         setPassportImage(null);
       }
-    } catch {
+    } catch (err) {
+      console.error("Failed to load passport metadata:", err);
       setPassportId(null);
       setPassportImage(null);
     }
@@ -175,6 +182,7 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
+
   return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
@@ -190,34 +198,20 @@ export default function Nation() {
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
-
         {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
             {passportImage ? (
               <div className="flex flex-col items-center">
-                <img
-                  src={passportImage}
-                  alt={`Passport #${passportId}`}
-                  className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover"
-                  style={{ background: '#111' }}
-                />
+                <img src={passportImage} alt={`Passport #${passportId}`} className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover" />
                 <p className="text-yellow-400 font-mono text-sm mb-1">Passport ID: {passportId}</p>
-                <a
-                  href={`https://slyroze.com/metadata/passport/${passportId}.json`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 text-xs underline"
-                >
-                  View Metadata
-                </a>
+                <a href={`https://slyroze.com/metadata/passport/${passportId}.json`} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xs underline">View Metadata</a>
               </div>
             ) : (
               <p className="text-gray-400 italic">No Passport found. Mint yours below!</p>
             )}
           </section>
         )}
-
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
           <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
@@ -232,10 +226,7 @@ export default function Nation() {
         </div>
 
         <section className="mt-10">
-          <button
-            onClick={() => setShowHowNationWorks(!showHowNationWorks)}
-            className="bg-gray-800 py-3 px-6 rounded-lg hover:bg-gray-700 transition text-xl font-semibold"
-          >
+          <button onClick={() => setShowHowNationWorks(!showHowNationWorks)} className="bg-gray-800 py-3 px-6 rounded-lg hover:bg-gray-700 transition text-xl font-semibold">
             How Nation Works {showHowNationWorks ? '▲' : '▼'}
           </button>
           {showHowNationWorks && (
@@ -257,49 +248,3 @@ export default function Nation() {
           <div className="flex flex-wrap justify-center gap-6">
             <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
               <p className="text-3xl font-bold">{stats.users}</p>
-              <p>Active Users</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
-              <p className="text-3xl font-bold">{stats.zones}</p>
-              <p>Claimed Zones</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
-              <p className="text-3xl font-bold">{stats.passports}</p>
-              <p>Passports Minted</p>
-            </div>
-          </div>
-        </section>
-
-        <Leaderboard data={leaderboard.slice(0, 5)} />
-
-        <div className="flex justify-center gap-6 text-2xl my-8">
-          <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
-          <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
-          <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
-          <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
-        </div>
-
-        <ZoneGrid signer={signer} walletAddress={walletAddress} />
-      </main>
-
-      {loadingMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <p className="text-xl text-white animate-pulse">{loadingMessage}</p>
-        </div>
-      )}
-
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-      {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
-      {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
-      {showNicknameModal && (
-        <NicknameModal
-          isOpen={showNicknameModal}
-          onClose={() => setShowNicknameModal(false)}
-          onSave={handleSetAlias}
-        />
-      )}
-
-      <NationMapOverlay />
-    </div>
-  );
-              }
