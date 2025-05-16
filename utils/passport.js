@@ -3,7 +3,7 @@ import { db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 // Your deployed Passport contract address
-const PASSPORT_CONTRACT_ADDRESS = "0xf120600666c2C2663EC0cDfBB53B1c1a82E4feF3";
+const PASSPORT_CONTRACT_ADDRESS = "0xfd3BC111A9f4A0d86875f6B4Ca4Df592179CE0ca";
 
 const PASSPORT_ABI = [
   {
