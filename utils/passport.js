@@ -2,8 +2,8 @@ import { ethers } from "ethers";
 import { db } from "./firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-// Replace with your actual deployed contract address
-const PASSPORT_CONTRACT_ADDRESS = "0xYourPassportContractAddressHere";
+// Your deployed Passport contract address
+const PASSPORT_CONTRACT_ADDRESS = "0xf120600666c2C2663EC0cDfBB53B1c1a82E4feF3";
 
 const PASSPORT_ABI = [
   {
@@ -25,27 +25,28 @@ const PASSPORT_ABI = [
   }
 ];
 
-export async function mintPassport(signer, userAddress, ownerUid) {
-  const passport = new ethers.Contract(PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI, signer);
-
+export async function mintPassport(signer, walletAddress, ownerUid) {
   try {
-    // Call the contract to mint
-    const tx = await passport.mintPassport(userAddress);
+    // Ensure address is raw string and NOT ENS
+    const address = walletAddress || (signer.getAddress ? await signer.getAddress() : signer.address);
+
+    const passport = new ethers.Contract(PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI, signer);
+    const tx = await passport.mintPassport(address);
     const receipt = await tx.wait();
 
-    // Extract the tokenId from Transfer event
-    const transferEvent = receipt.events.find(e => e.event === "Transfer");
+    const transferEvent = receipt.events?.find(e => e.event === "Transfer");
     const tokenId = transferEvent?.args?.tokenId?.toString();
 
     if (!tokenId) {
-      alert("Passport minted but tokenId was not found in the event log.");
+      console.warn("Transfer event missing or malformed:", receipt.events);
+      alert("Passport minted but tokenId not found in the logs.");
       return null;
     }
 
-    // ✅ Save the passport to Firestore
+    // Save to Firestore
     await setDoc(doc(db, "passports", tokenId), {
       tokenId,
-      wallet: userAddress,
+      wallet: address,
       ownerUid,
       timestamp: Date.now()
     });
