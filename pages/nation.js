@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { signOut, onAuthStateChanged, deleteUser } from "firebase/auth";
-import { collection, getDocs, doc, deleteDoc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from '../utils/firebase';
 import Header from '../components/Header';
-import HeroBackground from '../components/HeroBackground';
 import NationMapOverlay from '../components/NationMapOverlay';
 import AuthModal from '../components/AuthModal';
 import AboutPanel from '../components/AboutPanel';
@@ -34,8 +33,7 @@ export default function Nation() {
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [showHowNationWorks, setShowHowNationWorks] = useState(false);
   const [stats, setStats] = useState({ users: 0, zones: 0, passports: 0 });
-
-  // Passport NFT State
+  // Passport display state
   const [passportId, setPassportId] = useState(null);
   const [passportImage, setPassportImage] = useState(null);
 
@@ -52,9 +50,22 @@ export default function Nation() {
     return () => unsubscribe();
   }, []);
 
-  // Fetch Passport function
+  useEffect(() => {
+    async function loadLeaders() {
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+    }
+    async function loadStats() {
+      const usersSnap = await getDocs(collection(db, "users"));
+      const zonesSnap = await getDocs(collection(db, "claimed_zones"));
+      const passportsSnap = await getDocs(collection(db, "passports"));
+      setStats({ users: usersSnap.size, zones: zonesSnap.size, passports: passportsSnap.size });
+    }
+    loadLeaders();
+    loadStats();
+  }, []);
+  // Fetch passport data for this user
   async function fetchPassport(uid) {
-    // Check if user has a passport in Firestore
     try {
       const passSnap = await getDocs(collection(db, "passports"));
       let found = null;
@@ -64,7 +75,7 @@ export default function Nation() {
       if (found) {
         const id = found.data().tokenId || found.id;
         setPassportId(id);
-        // Fetch metadata
+        // Fetch NFT metadata
         const url = `https://slyroze.com/metadata/passport/${id}.json`;
         const res = await fetch(url);
         if (res.ok) {
@@ -77,13 +88,35 @@ export default function Nation() {
         setPassportId(null);
         setPassportImage(null);
       }
-    } catch (err) {
+    } catch {
       setPassportId(null);
       setPassportImage(null);
     }
   }
 
-  // On Mint, refetch passport info
+  // Wallet connect handler
+  const handleConnectWallet = async () => {
+    try {
+      const result = await connectWallet();
+      if (result) {
+        setWalletAddress(result.address);
+        setProvider(result.provider);
+        setSigner(result.signer);
+        const balance = await getSlypBalance(result.provider, result.address);
+        setSlypBalance(balance);
+      }
+    } catch (err) {
+      alert("Wallet connect failed");
+    }
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    await signOut(auth);
+    alert("Logged out successfully.");
+  };
+
+  // Mint passport
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -91,19 +124,70 @@ export default function Nation() {
       await mintPassport(signer, walletAddress);
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
-      // Try to reload passport
       if (user) await fetchPassport(user.uid);
       alert("Passport Minted Successfully!");
     } catch (err) {
-      console.error(err);
       alert("Minting failed: " + err.message);
     } finally {
       setLoadingMessage("");
     }
   };
 
-  // ...rest of your functions unchanged...
-return (
+  // Claim zone
+  const handleClaimZone = async () => {
+    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    try {
+      const zoneId = prompt("Enter Zone ID to claim (e.g., zone-000001):");
+      if (!zoneId) return;
+      const slypPrice = 50;
+      setLoadingMessage(`Claiming ${zoneId}...`);
+      const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
+      alert(result);
+      const updatedLeaderboard = await getLeaderboard();
+      setLeaderboard(updatedLeaderboard);
+    } catch (err) {
+      alert("Claim failed: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  // Set nickname
+  const handleSetAlias = async (nickname) => {
+    if (!walletAddress) return alert("Connect Wallet first.");
+    try {
+      setLoadingMessage("Saving Nickname...");
+      if (!user) return alert("Login required.");
+      await setUserAlias(user.uid, nickname);
+      const data = await getLeaderboard();
+      setLeaderboard(data);
+      alert("Nickname set successfully!");
+    } catch (err) {
+      alert("Failed to set nickname: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  // Delete account
+  const handleDeleteAccount = async () => {
+    const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
+    if (confirmDelete !== 'delete') return alert("Cancelled.");
+    try {
+      setLoadingMessage("Deleting Account...");
+      if (!user) return alert("Login required.");
+      await deleteDoc(doc(db, "users", user.uid));
+      await deleteUser(user);
+      alert("Account deleted.");
+    } catch (err) {
+      alert("Failed to delete: " + err.message);
+    } finally {
+      setLoadingMessage("");
+    }
+  };
+
+  // ====== Render start ======
+  return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
       <main className="container mx-auto p-4 sm:p-6 md:p-8 text-center space-y-6 relative z-10">
@@ -119,7 +203,7 @@ return (
         </div>
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
-        {/* ========== Your Passport Section ========== */}
+        {/* Passport NFT display */}
         {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
@@ -146,10 +230,20 @@ return (
             )}
           </section>
         )}
-        {/* ========== End Passport Section ========== */}
+<div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
+          <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
+          <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
+          {user && (
+            <>
+              <button onClick={() => setShowNicknameModal(true)} className="bg-yellow-500 hover:bg-yellow-600 text-black py-2 px-4 rounded">Set Nickname</button>
+              <button onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Delete Account</button>
+            </>
+          )}
+          <button onClick={handleMintPassport} className="bg-neonPurple text-white py-2 px-4 rounded shadow-neon">Mint Passport</button>
+          <button onClick={handleClaimZone} className="bg-neonGreen text-black py-2 px-4 rounded shadow-neon">Claim Zone</button>
+        </div>
 
-        {/* [keep everything below here unchanged except main closing tags] */}
-{/* How Nation Works Section */}
+        {/* How Nation Works Section */}
         <section className="mt-10">
           <button
             onClick={() => setShowHowNationWorks(!showHowNationWorks)}
@@ -202,8 +296,8 @@ return (
         </div>
 
         <ZoneGrid signer={signer} walletAddress={walletAddress} />
-
       </main>
+
       {loadingMessage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
           <p className="text-xl text-white animate-pulse">{loadingMessage}</p>
@@ -221,8 +315,8 @@ return (
         />
       )}
 
-      {/* Fixed map image path */}
+      {/* Map overlay */}
       <NationMapOverlay />
     </div>
   );
-                      }
+            }
