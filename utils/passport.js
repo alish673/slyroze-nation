@@ -1,37 +1,34 @@
-import { ethers } from "ethers";
-
-// Correct contract addresses
-const PASSPORT_CONTRACT_ADDRESS = "0xfd3BC111A9f4A0d86875f6B4Ca4Df592179CE0ca";
-const SLYP_CONTRACT_ADDRESS = "0x8E750e6E68f1378fEe36fEb74d8d28818b3B37b7";
-
-// ABIs
-const SLYP_ABI = [
-  "function allowance(address owner, address spender) view returns (uint256)",
-  "function approve(address spender, uint256 amount) returns (bool)"
-];
-
-const PASSPORT_ABI = [
-  "function currentPrice() view returns (uint256)",
-  "function mintPassport()"
-];
-
+// In passport.js or your minting file
 export async function mintPassport(signer, userAddress) {
   const slyp = new ethers.Contract(SLYP_CONTRACT_ADDRESS, SLYP_ABI, signer);
   const passport = new ethers.Contract(PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI, signer);
 
-  // Get dynamic mint price from contract
-  const price = await passport.currentPrice();
+  const mintCost = ethers.utils.parseUnits("200", 18);
+  const burnAmount = ethers.utils.parseUnits("2", 18);
 
-  // Check SLYP allowance
   const allowance = await slyp.allowance(userAddress, PASSPORT_CONTRACT_ADDRESS);
-  if (allowance.lt(price)) {
-    const approveTx = await slyp.approve(PASSPORT_CONTRACT_ADDRESS, price);
+  if (allowance.lt(mintCost)) {
+    const approveTx = await slyp.approve(PASSPORT_CONTRACT_ADDRESS, mintCost);
     await approveTx.wait();
   }
 
-  // Mint passport
-  const mintTx = await passport.mintPassport();
-  await mintTx.wait();
+  const transferTx = await slyp.transferFrom(userAddress, PASSPORT_CONTRACT_ADDRESS, mintCost);
+  await transferTx.wait();
 
-  return true;
+  // MINT and get tokenId from the event log
+  const mintTx = await passport.mintPassport(userAddress);
+  const receipt = await mintTx.wait();
+
+  // Get Token ID from Transfer event (standard for ERC-721)
+  const transferEvent = receipt.events.find(e => e.event === "Transfer");
+  const tokenId = transferEvent.args.tokenId.toString();
+
+  // Optional: burn step if needed
+  const burnTx = await slyp.burn(burnAmount);
+  await burnTx.wait();
+
+  // Show token ID to user
+  alert(`Passport Minted Successfully! Token ID: #${tokenId}`);
+
+  return tokenId;
 }
