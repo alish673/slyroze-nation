@@ -18,6 +18,7 @@ import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { ethers } from "ethers"; // IMPORTANT: fixes "ethers is not defined"
 
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -33,16 +34,14 @@ export default function Nation() {
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [showHowNationWorks, setShowHowNationWorks] = useState(false);
   const [stats, setStats] = useState({ users: 0, zones: 0, passports: 0 });
-  // Passport display state
   const [passportId, setPassportId] = useState(null);
   const [passportImage, setPassportImage] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
-      if (usr) {
-        fetchPassport(usr.uid);
-      } else {
+      if (usr) fetchPassport(usr.uid);
+      else {
         setPassportId(null);
         setPassportImage(null);
       }
@@ -64,7 +63,6 @@ export default function Nation() {
     loadLeaders();
     loadStats();
   }, []);
-  // Fetch passport data for this user
   async function fetchPassport(uid) {
     try {
       const passSnap = await getDocs(collection(db, "passports"));
@@ -75,9 +73,7 @@ export default function Nation() {
       if (found) {
         const id = found.data().tokenId || found.id;
         setPassportId(id);
-        // Fetch NFT metadata
-        const url = `https://slyroze.com/metadata/passport/${id}.json`;
-        const res = await fetch(url);
+        const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
         if (res.ok) {
           const data = await res.json();
           setPassportImage(data.image);
@@ -94,7 +90,6 @@ export default function Nation() {
     }
   }
 
-  // Wallet connect handler
   const handleConnectWallet = async () => {
     try {
       const result = await connectWallet();
@@ -110,13 +105,11 @@ export default function Nation() {
     }
   };
 
-  // Logout
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
   };
 
-  // Mint passport
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -133,7 +126,6 @@ export default function Nation() {
     }
   };
 
-  // Claim zone
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -152,7 +144,6 @@ export default function Nation() {
     }
   };
 
-  // Set nickname
   const handleSetAlias = async (nickname) => {
     if (!walletAddress) return alert("Connect Wallet first.");
     try {
@@ -169,7 +160,6 @@ export default function Nation() {
     }
   };
 
-  // Delete account
   const handleDeleteAccount = async () => {
     const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
     if (confirmDelete !== 'delete') return alert("Cancelled.");
@@ -186,7 +176,6 @@ export default function Nation() {
     }
   };
 
-  // ====== Render start ======
   return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
@@ -203,7 +192,7 @@ export default function Nation() {
         </div>
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
-        {/* Passport NFT display */}
+        {/* Display user's Passport */}
         {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
@@ -315,7 +304,6 @@ export default function Nation() {
         />
       )}
 
-      {/* Map overlay */}
       <NationMapOverlay />
     </div>
   );
