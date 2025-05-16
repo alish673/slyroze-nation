@@ -166,7 +166,7 @@ export default function Landing() {
               <span className="bg-green-700/60 px-4 py-2 rounded-full">Contract Verified</span>
               <span className="bg-yellow-600/60 px-4 py-2 rounded-full">Liquidity Lock (coming soon)</span>
               <span className="bg-blue-600/60 px-4 py-2 rounded-full">Ownership Renounced (planned)</span>
-              <span className="bg-purple-600/60 px-4 py-2 rounded-full">Infrastructure Lock (soon)</span>
+              <span className="bg-purple-600/60 px-4 py-2 rounded-full">Non-upgradable Contracts</span>
             </div>
           </section>
 
