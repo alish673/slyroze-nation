@@ -99,9 +99,9 @@ export default function Landing() {
             {showWhy && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg text-left">
                 <ul className="list-disc list-inside space-y-2">
-                  <li>Community-driven blockchain ecosystem</li>
+                  <li>Community-driven ecosystem</li>
                   <li>Utility-backed NFT minting via SlyPass</li>
-                  <li>Real-time land ownership and interactive maps</li>
+                  <li>Real-time NFT land ownership and interactive maps</li>
                   <li>UBI & fair airdrops to all participants</li>
                   <li>Transparent, auditable token contracts</li>
                 </ul>
