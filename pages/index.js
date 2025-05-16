@@ -37,8 +37,8 @@ export default function Landing() {
         <HeroBackground />
         <Header />
 
-        {/* Top Social Media Icons */}
-        <div className="absolute top-2 inset-x-0 flex justify-center gap-5 text-lg z-50">
+        {/* Social Media Icons - Fixed to Top Right */}
+        <div className="fixed top-2 right-3 flex gap-4 text-lg z-50">
           <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
           <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" rel="noopener noreferrer" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
           <a href="https://t.me/slyrozetoken" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
@@ -46,13 +46,13 @@ export default function Landing() {
         </div>
 
         {/* Logo Row */}
-        <div className="absolute top-12 left-4 flex items-center gap-2">
+        <div className="absolute top-4 left-4 flex items-center gap-2">
           <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
-        <div className="absolute top-12 right-4 flex items-center gap-2">
+        <div className="absolute top-4 right-4 flex items-center gap-2">
           <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
-        <div className="flex justify-center pt-20">
+        <div className="flex justify-center pt-12">
           <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
         </div>
 <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
@@ -195,4 +195,4 @@ export default function Landing() {
       </div>
     </>
   );
-            }
+          }
