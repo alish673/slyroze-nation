@@ -18,7 +18,7 @@ import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { ethers } from "ethers"; // IMPORTANT: fixes "ethers is not defined"
+import { ethers } from "ethers";
 
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -63,6 +63,21 @@ export default function Nation() {
     loadLeaders();
     loadStats();
   }, []);
+
+  const handleConnectWallet = async () => {
+    try {
+      const result = await connectWallet();
+      if (result) {
+        setWalletAddress(result.address);
+        setProvider(result.provider);
+        setSigner(result.signer);
+        const balance = await getSlypBalance(result.provider, result.address);
+        setSlypBalance(balance);
+      }
+    } catch (err) {
+      alert("Wallet connect failed.");
+    }
+  };
   async function fetchPassport(uid) {
     try {
       const passSnap = await getDocs(collection(db, "passports"));
@@ -90,21 +105,6 @@ export default function Nation() {
     }
   }
 
-  const handleConnectWallet = async () => {
-    try {
-      const result = await connectWallet();
-      if (result) {
-        setWalletAddress(result.address);
-        setProvider(result.provider);
-        setSigner(result.signer);
-        const balance = await getSlypBalance(result.provider, result.address);
-        setSlypBalance(balance);
-      }
-    } catch (err) {
-      alert("Wallet connect failed");
-    }
-  };
-
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
@@ -114,11 +114,10 @@ export default function Nation() {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
       setLoadingMessage("Minting Passport...");
-      await mintPassport(signer, walletAddress);
+      const tokenId = await mintPassport(signer, walletAddress);
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
       if (user) await fetchPassport(user.uid);
-      alert("Passport Minted Successfully!");
     } catch (err) {
       alert("Minting failed: " + err.message);
     } finally {
@@ -232,7 +231,6 @@ export default function Nation() {
           <button onClick={handleClaimZone} className="bg-neonGreen text-black py-2 px-4 rounded shadow-neon">Claim Zone</button>
         </div>
 
-        {/* How Nation Works Section */}
         <section className="mt-10">
           <button
             onClick={() => setShowHowNationWorks(!showHowNationWorks)}
@@ -254,7 +252,6 @@ export default function Nation() {
           )}
         </section>
 
-        {/* Real-time Nation Stats */}
         <section className="mt-10 text-gray-300">
           <h2 className="text-2xl font-semibold mb-4">Nation Stats</h2>
           <div className="flex flex-wrap justify-center gap-6">
@@ -273,10 +270,8 @@ export default function Nation() {
           </div>
         </section>
 
-        {/* Top 5 Zone Holders */}
         <Leaderboard data={leaderboard.slice(0, 5)} />
 
-        {/* Social Icons */}
         <div className="flex justify-center gap-6 text-2xl my-8">
           <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
           <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
@@ -307,4 +302,4 @@ export default function Nation() {
       <NationMapOverlay />
     </div>
   );
-            }
+}
