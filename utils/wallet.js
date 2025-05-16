@@ -1,21 +1,19 @@
-import { ethers } from "ethers";
-
 export async function connectWallet() {
-  if (typeof window === "undefined" || !window.ethereum) {
-    alert("MetaMask is not installed. Please install it to continue.");
+  if (typeof window === "undefined" || typeof window.ethereum === "undefined") {
+    alert("MetaMask is not available. Please install MetaMask.");
     return null;
   }
 
   try {
-    // Request account access
-    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    const { ethers } = await import("ethers"); // dynamic import prevents SSR crash
     const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     const signer = provider.getSigner();
-    const address = accounts[0];
+    const address = await signer.getAddress();
     return { provider, signer, address };
-  } catch (error) {
-    console.error("Wallet connection error:", error);
-    alert("Wallet connection failed: " + (error.message || error));
+  } catch (err) {
+    console.error("Wallet connection error:", err);
+    alert("Wallet connection failed: " + (err.message || err));
     return null;
   }
 }
