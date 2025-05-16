@@ -1,0 +1,28 @@
+{
+  "name": "Slyroze Passport #764",
+  "description": "A digital collectible from the Slyroze Nation collection. This NFT serves as a symbolic ID within the Slyroze ecosystem, representing membership and participation.",
+  "image": "https://slyroze.com/assets/passport-card.png",
+  "attributes": [
+    {
+      "trait_type": "Type",
+      "value": "Passport"
+    },
+    {
+      "trait_type": "Collection",
+      "value": "Slyroze Nation"
+    },
+    {
+      "trait_type": "Utility",
+      "value": "Digital Identity"
+    },
+    {
+      "trait_type": "Supply",
+      "value": "Limited to 1,000,000"
+    },
+    {
+      "trait_type": "Passport ID",
+      "value": 764
+    }
+  ],
+  "external_url": "https://slyroze.com/nation"
+}
