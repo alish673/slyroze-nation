@@ -1,4 +1,8 @@
-// In passport.js or your minting file
+import { ethers } from "ethers"; // REQUIRED to avoid "ethers is not defined"
+
+import { SLYP_CONTRACT_ADDRESS, SLYP_ABI } from './slyp';
+import { PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI } from './passportContract';
+
 export async function mintPassport(signer, userAddress) {
   const slyp = new ethers.Contract(SLYP_CONTRACT_ADDRESS, SLYP_ABI, signer);
   const passport = new ethers.Contract(PASSPORT_CONTRACT_ADDRESS, PASSPORT_ABI, signer);
@@ -6,28 +10,30 @@ export async function mintPassport(signer, userAddress) {
   const mintCost = ethers.utils.parseUnits("200", 18);
   const burnAmount = ethers.utils.parseUnits("2", 18);
 
+  // Check allowance
   const allowance = await slyp.allowance(userAddress, PASSPORT_CONTRACT_ADDRESS);
   if (allowance.lt(mintCost)) {
     const approveTx = await slyp.approve(PASSPORT_CONTRACT_ADDRESS, mintCost);
     await approveTx.wait();
   }
 
+  // Transfer SLYP tokens to contract
   const transferTx = await slyp.transferFrom(userAddress, PASSPORT_CONTRACT_ADDRESS, mintCost);
   await transferTx.wait();
 
-  // MINT and get tokenId from the event log
+  // Mint the passport NFT
   const mintTx = await passport.mintPassport(userAddress);
   const receipt = await mintTx.wait();
 
-  // Get Token ID from Transfer event (standard for ERC-721)
+  // Get tokenId from the Transfer event
   const transferEvent = receipt.events.find(e => e.event === "Transfer");
   const tokenId = transferEvent.args.tokenId.toString();
 
-  // Optional: burn step if needed
+  // Optional: Burn 2 SLYP
   const burnTx = await slyp.burn(burnAmount);
   await burnTx.wait();
 
-  // Show token ID to user
+  // Notify user
   alert(`Passport Minted Successfully! Token ID: #${tokenId}`);
 
   return tokenId;
