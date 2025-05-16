@@ -116,7 +116,7 @@ export default function Landing() {
                 Tokenomics <span>{showTokenomics ? '-' : '+'}</span>
               </h2>
             </button>
-{showTokenomics && (
+            {showTokenomics && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg">
                 <h3 className="text-2xl font-bold text-neonPurple">SlyRoze Token (SLY)</h3>
                 <p>Total Supply: 100 Million SLY</p>
@@ -128,8 +128,7 @@ export default function Landing() {
                 <p>No taxes, no burns, direct utility for NFT minting & zone claiming.</p>
               </div>
             )}
-
-            {/* Roadmap Accordion */}
+{/* Roadmap Accordion */}
             <button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Roadmap <span>{showRoadmap ? '-' : '+'}</span>
@@ -195,4 +194,4 @@ export default function Landing() {
       </div>
     </>
   );
-  }
+            }
