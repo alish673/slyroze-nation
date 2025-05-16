@@ -18,7 +18,6 @@ import { claimZoneWithSlyPass } from '../utils/zone';
 import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { ethers } from "ethers";
 
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -36,7 +35,6 @@ export default function Nation() {
   const [stats, setStats] = useState({ users: 0, zones: 0, passports: 0 });
   const [passportId, setPassportId] = useState(null);
   const [passportImage, setPassportImage] = useState(null);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
@@ -48,6 +46,7 @@ export default function Nation() {
     });
     return () => unsubscribe();
   }, []);
+
   useEffect(() => {
     async function loadLeaders() {
       const data = await getLeaderboard();
@@ -87,20 +86,22 @@ export default function Nation() {
       passSnap.forEach((doc) => {
         if (doc.data().ownerUid === uid) found = doc;
       });
+
       if (found) {
         const id = found.data().tokenId || found.id;
         setPassportId(id);
         const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
-        if (res.ok) {
-          const data = await res.json();
+        const raw = await res.text();
+        try {
+          const data = JSON.parse(raw);
           if (data && data.image) {
             setPassportImage(data.image);
           } else {
-            console.warn("Metadata missing image field:", data);
+            console.warn("Metadata JSON missing image:", data);
             setPassportImage(null);
           }
-        } else {
-          console.warn("Metadata fetch failed:", res.status);
+        } catch (err) {
+          console.error("Invalid JSON metadata:", raw);
           setPassportImage(null);
         }
       } else {
@@ -108,18 +109,19 @@ export default function Nation() {
         setPassportImage(null);
       }
     } catch (err) {
-      console.error("Failed to load passport metadata:", err);
+      console.error("fetchPassport error:", err);
       setPassportId(null);
       setPassportImage(null);
     }
-  }
-
+      }
   const handleLogout = async () => {
     await signOut(auth);
     alert("Logged out successfully.");
   };
+
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    if (passportId) return alert("You already have a Passport.");
     try {
       setLoadingMessage("Minting Passport...");
       const tokenId = await mintPassport(signer, walletAddress);
@@ -197,21 +199,34 @@ export default function Nation() {
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
+
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
-        {user && (
+{user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
             {passportImage ? (
               <div className="flex flex-col items-center">
-                <img src={passportImage} alt={`Passport #${passportId}`} className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover" />
+                <img
+                  src={passportImage}
+                  alt={`Passport #${passportId}`}
+                  className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover"
+                />
                 <p className="text-yellow-400 font-mono text-sm mb-1">Passport ID: {passportId}</p>
-                <a href={`https://slyroze.com/metadata/passport/${passportId}.json`} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xs underline">View Metadata</a>
+                <a
+                  href={`https://slyroze.com/metadata/passport/${passportId}.json`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 text-xs underline"
+                >
+                  View Metadata
+                </a>
               </div>
             ) : (
               <p className="text-gray-400 italic">No Passport found. Mint yours below!</p>
             )}
           </section>
         )}
+
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
           <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
@@ -292,4 +307,4 @@ export default function Nation() {
       <NationMapOverlay />
     </div>
   );
-    }
+              }
