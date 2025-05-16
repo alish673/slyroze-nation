@@ -11,9 +11,15 @@ export default function ZoneGrid({ signer, walletAddress }) {
 
   useEffect(() => {
     async function fetchZones() {
-      const snapshot = await getDocs(collection(db, 'zones'));
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setZones(data);
+      try {
+        const snapshot = await getDocs(collection(db, 'zones'));
+        const docs = Array.isArray(snapshot?.docs) ? snapshot.docs : [];
+        const data = docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setZones(data);
+      } catch (err) {
+        console.error("Failed to fetch zones:", err);
+        setZones([]);
+      }
     }
     fetchZones();
   }, []);
@@ -26,7 +32,8 @@ export default function ZoneGrid({ signer, walletAddress }) {
       alert(result);
 
       const snapshot = await getDocs(collection(db, 'zones'));
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const docs = Array.isArray(snapshot?.docs) ? snapshot.docs : [];
+      const data = docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setZones(data);
     } catch (error) {
       console.error(error);
@@ -84,4 +91,4 @@ export default function ZoneGrid({ signer, walletAddress }) {
       </div>
     </div>
   );
-        }
+      }
