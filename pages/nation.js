@@ -199,27 +199,16 @@ export default function Nation() {
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
         </div>
-{walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
+        {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
         {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
             {passportImage ? (
               <div className="flex flex-col items-center">
-                <img
-                  src={passportImage}
-                  alt={`Passport #${passportId}`}
-                  className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover"
-                />
+                <img src={passportImage} alt={`Passport #${passportId}`} className="w-40 h-60 rounded-xl border-4 border-yellow-400 shadow-lg mb-2 bg-gray-900 object-cover" />
                 <p className="text-yellow-400 font-mono text-sm mb-1">Passport ID: {passportId}</p>
-                <a
-                  href={`https://slyroze.com/metadata/passport/${passportId}.json`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 text-xs underline"
-                >
-                  View Metadata
-                </a>
+                <a href={`https://slyroze.com/metadata/passport/${passportId}.json`} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-xs underline">View Metadata</a>
               </div>
             ) : (
               <p className="text-gray-400 italic">No Passport found. Mint yours below!</p>
@@ -258,25 +247,8 @@ export default function Nation() {
           )}
         </section>
 
-        <section className="mt-10 text-gray-300">
-          <h2 className="text-2xl font-semibold mb-4">Nation Stats</h2>
-          <div className="flex flex-wrap justify-center gap-6">
-            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
-              <p className="text-3xl font-bold">{stats.users}</p>
-              <p>Active Users</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
-              <p className="text-3xl font-bold">{stats.zones}</p>
-              <p>Claimed Zones</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl shadow text-center">
-              <p className="text-3xl font-bold">{stats.passports}</p>
-              <p>Passports Minted</p>
-            </div>
-          </div>
-        </section>
-
         <Leaderboard data={leaderboard.slice(0, 5)} />
+        <ZoneGrid signer={signer} walletAddress={walletAddress} />
 
         <div className="flex justify-center gap-6 text-2xl my-8">
           <a href="https://x.com/slyroze" target="_blank" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
@@ -284,8 +256,6 @@ export default function Nation() {
           <a href="https://t.me/slyrozetoken" target="_blank" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
           <a href="https://www.instagram.com/slyroze" target="_blank" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
         </div>
-
-        <ZoneGrid signer={signer} walletAddress={walletAddress} />
       </main>
 
       {loadingMessage && (
@@ -304,8 +274,7 @@ export default function Nation() {
           onSave={handleSetAlias}
         />
       )}
-
       <NationMapOverlay />
     </div>
   );
-              }
+        }
