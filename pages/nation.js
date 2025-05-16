@@ -124,7 +124,7 @@ export default function Nation() {
     if (passportId) return alert("You already have a Passport.");
     try {
       setLoadingMessage("Minting Passport...");
-      const tokenId = await mintPassport(signer, walletAddress);
+      const tokenId = await mintPassport(signer, walletAddress, user.uid);
       const balance = await getSlypBalance(provider, walletAddress);
       setSlypBalance(balance);
       if (user) await fetchPassport(user.uid);
