@@ -5,8 +5,18 @@ export async function connectWallet() {
   }
 
   try {
-    const { ethers } = await import("ethers"); // dynamic import prevents SSR crash
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // Diagnostic logs
+    console.log("About to import ethers dynamically...");
+    const ethersImport = await import("ethers");
+    console.log("ethersImport result:", ethersImport);
+
+    if (!ethersImport || !ethersImport.ethers || !ethersImport.ethers.providers) {
+      alert("Ethers is not loaded properly! Check your build or ethers version.");
+      return null;
+    }
+
+    const { ethers } = ethersImport;
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await window.ethereum.request({ method: "eth_requestAccounts" });
     const signer = provider.getSigner();
     const address = await signer.getAddress();
