@@ -48,7 +48,6 @@ export default function Nation() {
     });
     return () => unsubscribe();
   }, []);
-
   useEffect(() => {
     async function loadLeaders() {
       const data = await getLeaderboard();
@@ -66,6 +65,7 @@ export default function Nation() {
 
   const handleConnectWallet = async () => {
     try {
+      if (!window.ethereum) throw new Error("MetaMask not found");
       const result = await connectWallet();
       if (result) {
         setWalletAddress(result.address);
@@ -75,9 +75,11 @@ export default function Nation() {
         setSlypBalance(balance);
       }
     } catch (err) {
-      alert("Wallet connect failed.");
+      console.error(err);
+      alert("Wallet connect failed. " + err.message);
     }
   };
+
   async function fetchPassport(uid) {
     try {
       const passSnap = await getDocs(collection(db, "passports"));
@@ -109,7 +111,6 @@ export default function Nation() {
     await signOut(auth);
     alert("Logged out successfully.");
   };
-
   const handleMintPassport = async () => {
     if (!signer || !walletAddress) return alert("Connect Wallet first.");
     try {
@@ -174,7 +175,6 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
@@ -191,7 +191,6 @@ export default function Nation() {
         </div>
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
 
-        {/* Display user's Passport */}
         {user && (
           <section className="flex flex-col items-center mt-8">
             <h2 className="text-2xl font-semibold mb-2">Your Passport</h2>
@@ -218,7 +217,8 @@ export default function Nation() {
             )}
           </section>
         )}
-<div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10">
           <button onClick={() => setShowAboutPanel(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">About Slyroze</button>
           <button onClick={() => setShowDisclaimer(true)} className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded">Disclaimer</button>
           {user && (
@@ -302,4 +302,4 @@ export default function Nation() {
       <NationMapOverlay />
     </div>
   );
-}
+              }
