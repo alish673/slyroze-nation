@@ -237,7 +237,7 @@ export default function Nation() {
       {showNicknameModal && <NicknameModal isOpen={showNicknameModal} onClose={() => setShowNicknameModal(false)} onSave={handleSetAlias} />}
 
       {/* Fixed map image path */}
-      <NationMapOverlay imagePath="/map.png" />
+      <NationMapOverlay />
     </div>
   );
             }
