@@ -44,11 +44,15 @@ export default function Landing() {
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
-        <div className="flex justify-center pt-12">
+        <div className="flex justify-center pt-12 animate-bounce">
           <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
         </div>
 
-        <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
+        {/* New Banner */}
+        <div className="max-w-4xl mx-auto mt-8 px-4 animate-fadeInUp">
+          <img src="/banner.logo" alt="Fly High Stay Sly Banner" className="rounded-3xl shadow-2xl border border-yellow-400 w-full object-cover" />
+        </div>
+<main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
           <section className="space-y-8">
             <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
               Welcome to <span className="text-neonPurple drop-shadow-glow">Slyroze</span>
@@ -73,7 +77,8 @@ export default function Landing() {
               </Link>
             </div>
           </section>
-{/* Social Media Icons above Ecosystem section */}
+
+          {/* Social Media Icons above Ecosystem section */}
           <div className="flex justify-center gap-6 text-xl mt-8">
             <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
             <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" rel="noopener noreferrer" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
@@ -96,7 +101,7 @@ export default function Landing() {
                 Why Choose Slyroze <span>{showWhy ? '-' : '+'}</span>
               </h2>
             </button>
-            {showWhy && (
+{showWhy && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg text-left">
                 <ul className="list-disc list-inside space-y-2">
                   <li>Community-driven ecosystem</li>
@@ -128,7 +133,7 @@ export default function Landing() {
                 <p>No taxes, no burns, direct utility for NFT minting & zone claiming.</p>
               </div>
             )}
-{/* Roadmap Accordion */}
+
             <button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Roadmap <span>{showRoadmap ? '-' : '+'}</span>
@@ -143,7 +148,6 @@ export default function Landing() {
               </ul>
             )}
 
-            {/* Litepaper Accordion */}
             <button onClick={() => setShowLitepaper(!showLitepaper)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Litepaper <span>{showLitepaper ? '-' : '+'}</span>
@@ -169,7 +173,7 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* Footer with Logos */}
+          {/* Footer */}
           <footer className="text-center text-sm text-gray-500 mt-16 space-y-4">
             <div className="flex justify-center items-center gap-6">
               <div className="bg-gray-800/80 p-2 rounded-lg">
@@ -194,4 +198,4 @@ export default function Landing() {
       </div>
     </>
   );
-            }
+              }
