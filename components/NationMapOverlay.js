@@ -8,10 +8,11 @@ export default function NationMapOverlay() {
       {/* Nation PNG Map Background */}
       {!imageError ? (
         <img
-          src="/map.png?v=1"
+          src="/Map.png?v=1"
           alt="Slyroze Nation Map"
           className="w-full h-auto object-cover pointer-events-none"
           onError={() => setImageError(true)}
+          loading="lazy"
         />
       ) : (
         <div className="absolute inset-0 bg-red-700 text-white flex items-center justify-center text-2xl font-bold">
@@ -19,10 +20,8 @@ export default function NationMapOverlay() {
         </div>
       )}
 
-      {/* Debug Transparent Red Overlay */}
-      <div className="absolute inset-0 bg-red-500 opacity-10 pointer-events-none z-0">
-        {/* This red tint proves overlay is visible */}
-      </div>
+      {/* Optional Debug Red Overlay (keep or remove) */}
+      <div className="absolute inset-0 bg-red-500 opacity-10 pointer-events-none z-0" />
 
       {/* Overlay Hex Pattern & Glow Effects */}
       <svg
