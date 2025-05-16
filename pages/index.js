@@ -37,26 +37,25 @@ export default function Landing() {
         <HeroBackground />
         <Header />
 
-        {/* Logo Row */}
-        <div className="absolute top-4 left-4 flex items-center gap-2">
-          <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
-        </div>
-        <div className="absolute top-4 right-4 flex items-center gap-2">
-          <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
-        </div>
-        <div className="flex justify-center pt-12">
-          <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
-        </div>
-
         {/* Top Social Media Icons */}
-        <div className="absolute top-4 inset-x-0 flex justify-center gap-6 text-xl z-50">
+        <div className="absolute top-2 inset-x-0 flex justify-center gap-5 text-lg z-50">
           <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
           <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" rel="noopener noreferrer" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
           <a href="https://t.me/slyrozetoken" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 hover:scale-125 transition"><FaTelegram /></a>
           <a href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
         </div>
 
-        <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
+        {/* Logo Row */}
+        <div className="absolute top-12 left-4 flex items-center gap-2">
+          <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
+        </div>
+        <div className="absolute top-12 right-4 flex items-center gap-2">
+          <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
+        </div>
+        <div className="flex justify-center pt-20">
+          <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
+        </div>
+<main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
           <section className="space-y-8">
             <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
               Welcome to <span className="text-neonPurple drop-shadow-glow">Slyroze</span>
@@ -89,7 +88,8 @@ export default function Landing() {
               <img src="/ecosystem.png" alt="Slyroze Ecosystem Map" className="w-full object-cover" />
             </div>
           </section>
-{/* Why Choose Slyroze Section */}
+
+          {/* Why Choose Slyroze Section */}
           <section className="space-y-6">
             <button onClick={() => setShowWhy(!showWhy)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -116,7 +116,7 @@ export default function Landing() {
                 Tokenomics <span>{showTokenomics ? '-' : '+'}</span>
               </h2>
             </button>
-            {showTokenomics && (
+{showTokenomics && (
               <div className="bg-gray-900/90 rounded-xl p-6 text-gray-300 space-y-3 shadow-lg">
                 <h3 className="text-2xl font-bold text-neonPurple">SlyRoze Token (SLY)</h3>
                 <p>Total Supply: 100 Million SLY</p>
@@ -167,37 +167,6 @@ export default function Landing() {
               <span className="bg-yellow-600/60 px-4 py-2 rounded-full">Liquidity Lock (coming soon)</span>
               <span className="bg-blue-600/60 px-4 py-2 rounded-full">Ownership Renounced (planned)</span>
               <span className="bg-purple-600/60 px-4 py-2 rounded-full">Infrastructure Lock (soon)</span>
-            </div>
-          </section>
-{/* Meme Tracker */}
-          <section className="space-y-10">
-            <h2 className="text-3xl font-semibold">Meme Tracker (Instagram Latest)</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((item) => (
-                <a key={item} href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="block rounded-xl overflow-hidden shadow-md hover:scale-105 transition">
-                  <img src={`/memes/meme-${item}.jpg`} alt={`Meme ${item}`} className="w-full h-auto object-cover" />
-                </a>
-              ))}
-            </div>
-            <p className="text-sm text-gray-400">Follow us on Instagram for latest memes & updates.</p>
-          </section>
-
-          {/* Get Involved */}
-          <section className="space-y-10">
-            <h2 className="text-3xl font-semibold">Get Involved</h2>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/index" className="bg-slyrozeBlue text-black font-semibold py-3 px-6 rounded-xl shadow hover:scale-105 transition">
-                Enter Nation
-              </Link>
-              <Link href="/airdrop" className="bg-yellow-400 text-black font-semibold py-3 px-6 rounded-xl shadow hover:scale-105 transition">
-                Claim Airdrop
-              </Link>
-              <a href="https://t.me/slyroze" target="_blank" className="bg-purple-600 text-white font-semibold py-3 px-6 rounded-xl shadow hover:scale-105 transition">
-                Telegram Group
-              </a>
-              <a href="https://t.me/slyrozetoken" target="_blank" className="bg-purple-400 text-white font-semibold py-3 px-6 rounded-xl shadow hover:scale-105 transition">
-                Telegram Channel
-              </a>
             </div>
           </section>
 
