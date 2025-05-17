@@ -45,5 +45,8 @@ export async function mintPassport(signer, userAddress, userUid) {
     timestamp: Date.now()
   });
 
+  // Delay to ensure Firestore syncs before frontend fetch
+  await new Promise(res => setTimeout(res, 1000));
+
   return tokenId;
 }
