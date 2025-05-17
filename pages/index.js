@@ -53,7 +53,7 @@ export default function Landing() {
 
         {/* Banner Section */}
         <div className="max-w-2xl mx-auto mt-6 px-4 animate-fadeInUp">
-          <img src="/banner.logo" alt="Fly High Stay Sly" className="w-full rounded-2xl shadow-xl border border-yellow-500" />
+          <img src="/banner.png" alt="Fly High Stay Sly" className="w-full rounded-2xl shadow-xl border border-yellow-500" />
         </div>
 <main className="container mx-auto px-4 sm:px-6 md:px-8 text-center space-y-16 pt-12">
           <section className="space-y-8">
