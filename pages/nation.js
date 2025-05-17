@@ -53,6 +53,59 @@ function AlertModal({ message, onClose }) {
   );
 }
 
+import { query, where } from "firebase/firestore";
+
+async function fetchPassport(uid) {
+  try {
+    console.log("Fetching Passport for UID:", uid);
+
+    const q = query(collection(db, "passports"), where("ownerUid", "==", uid));
+    const snapshot = await getDocs(q);
+
+    console.log("Snapshot size:", snapshot.size);
+    if (snapshot.empty) {
+      console.warn("No passport found for this UID.");
+      setPassportId(null);
+      setPassportImage(null);
+      return;
+    }
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    console.log("Passport doc found:", doc.id, data);
+
+    const rawTokenId = data.tokenId || doc.id;
+    const id = parseInt(rawTokenId);
+    console.log("rawTokenId:", rawTokenId, "→ parsed ID:", id);
+
+    setPassportId(id);
+
+    const metadataUrl = `https://slyroze.com/metadata/passport/${id}.json`;
+    console.log("Fetching metadata from:", metadataUrl);
+
+    const res = await fetch(metadataUrl);
+    const raw = await res.text();
+
+    try {
+      const json = JSON.parse(raw);
+      console.log("Metadata JSON:", json);
+
+      if (json && json.image) {
+        setPassportImage(json.image);
+      } else {
+        console.warn("No image found in metadata.");
+        setPassportImage(null);
+      }
+    } catch (err) {
+      console.error("Error parsing metadata JSON:", err.message);
+      setPassportImage(null);
+    }
+  } catch (err) {
+    console.error("fetchPassport() failed:", err.message);
+    setPassportId(null);
+    setPassportImage(null);
+  }
+}
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
