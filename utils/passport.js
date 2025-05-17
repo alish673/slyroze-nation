@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { db } from "./firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 const PASSPORT_CONTRACT_ADDRESS = "0xfd3BC111A9f4A0d86875f6B4Ca4Df592179CE0ca";
 const SLYP_CONTRACT_ADDRESS = "0x8E750e6E68f1378fEe36fEb74d8d28818b3B37b7";
@@ -37,7 +37,7 @@ export async function mintPassport(signer, userAddress, userUid) {
 
   if (!tokenId) throw new Error("Mint succeeded but token ID not found");
 
-  // Save to Firestore
+  // Save passport to Firestore
   await setDoc(doc(db, "passports", tokenId), {
     tokenId,
     wallet: userAddress,
@@ -45,7 +45,12 @@ export async function mintPassport(signer, userAddress, userUid) {
     timestamp: Date.now()
   });
 
-  // Delay to ensure Firestore syncs before frontend fetch
+  // Update user to reflect they now have a passport
+  await updateDoc(doc(db, "users", userUid), {
+    hasPassport: true
+  });
+
+  // Small delay to avoid UI sync race
   await new Promise(res => setTimeout(res, 1000));
 
   return tokenId;
