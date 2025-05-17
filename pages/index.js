@@ -15,8 +15,11 @@ export default function Landing() {
   return (
     <>
       <Head>
-        <title>Slyroze | NFT Nation & SlyPass Token</title>
-        <meta name="description" content="Slyroze Nation - NFT land zones, SlyPass utility token, rewards & community-driven ownership." />
+        <title>Slyroze Nation</title>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="Slyroze (SLY) is a BNB-powered token and digital nation ecosystem." />
         <meta property="og:title" content="Slyroze Nation" />
         <meta property="og:description" content="Mint. Claim. Earn with SlyPass in the Slyroze Nation." />
         <meta property="og:image" content="/og-image.png" />
@@ -191,4 +194,4 @@ export default function Landing() {
       </div>
     </>
   );
-              }
+            }
