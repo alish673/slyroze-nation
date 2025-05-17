@@ -59,33 +59,37 @@ async function fetchPassport(uid, setPassportId, setPassportImage) {
     const snapshot = await getDocs(q);
 
     if (!snapshot.empty) {
-      const doc = snapshot.docs[0];
-      const data = doc.data();
-      const rawTokenId = data.tokenId || doc.id;
-      const id = parseInt(rawTokenId);
-      setPassportId(id);
+      const docData = snapshot.docs[0].data();
+      const rawTokenId = docData.tokenId;
 
-      const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
-      const raw = await res.text();
-      try {
-        const json = JSON.parse(raw);
-        if (json.image) {
-          setPassportImage(json.image);
-        } else {
-          setPassportImage(null);
-        }
-      } catch {
-        setPassportImage(null);
+      // Validate and sanitize tokenId
+      const id = String(rawTokenId).trim();
+      if (!/^\d+$/.test(id)) throw new Error("Invalid tokenId format: " + rawTokenId);
+
+      setPassportId(Number(id));
+
+      const url = `https://slyroze.com/metadata/passport/${id}.json`;
+      const res = await fetch(url);
+
+      if (!res.ok) throw new Error(`Metadata fetch failed: ${res.status}`);
+      const json = await res.json();
+
+      if (json.image) {
+        setPassportImage(json.image);
+      } else {
+        throw new Error("Image missing in metadata");
       }
     } else {
+      console.warn("No passport found for user:", uid);
       setPassportId(null);
       setPassportImage(null);
     }
-  } catch {
+  } catch (err) {
+    console.error("fetchPassport failed:", err.message);
     setPassportId(null);
     setPassportImage(null);
   }
-  }
+}
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
