@@ -19,7 +19,6 @@ import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
 
-// Mint Success Modal
 function MintSuccessModal({ tokenId, onClose }) {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(tokenId);
@@ -42,7 +41,6 @@ function MintSuccessModal({ tokenId, onClose }) {
   );
 }
 
-// Reusable Alert Modal
 function AlertModal({ message, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
@@ -73,7 +71,6 @@ export default function Nation() {
   const [passportImage, setPassportImage] = useState(null);
   const [showMintModal, setShowMintModal] = useState(false);
   const [customAlert, setCustomAlert] = useState("");
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
@@ -100,6 +97,7 @@ export default function Nation() {
     loadLeaders();
     loadStats();
   }, []);
+
   const handleConnectWallet = async () => {
     try {
       if (!window.ethereum) throw new Error("MetaMask not found");
@@ -135,19 +133,16 @@ export default function Nation() {
           if (data && data.image) {
             setPassportImage(data.image);
           } else {
-            console.warn("Metadata JSON missing image:", data);
             setPassportImage(null);
           }
-        } catch (err) {
-          console.error("Invalid JSON metadata:", raw);
+        } catch {
           setPassportImage(null);
         }
       } else {
         setPassportId(null);
         setPassportImage(null);
       }
-    } catch (err) {
-      console.error("fetchPassport error:", err);
+    } catch {
       setPassportId(null);
       setPassportImage(null);
     }
@@ -234,15 +229,17 @@ export default function Nation() {
 
         <div className="flex justify-center flex-wrap gap-4 mt-6">
           {user ? (
-            <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
+            <>
+              <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded">Logout</button>
+              <button onClick={() => setShowNicknameModal(true)} className="bg-yellow-400 text-black py-2 px-4 rounded">Set Nickname</button>
+              <button onClick={handleDeleteAccount} className="bg-red-700 text-white py-2 px-4 rounded">Delete Account</button>
+            </>
           ) : (
             <button onClick={() => setShowAuthModal(true)} className="bg-neonPurple hover:bg-neonGreen text-black py-2 px-4 rounded">Login / Sign Up</button>
           )}
           <button onClick={handleConnectWallet} className="bg-slyrozePink hover:bg-slyrozeBlue text-white py-2 px-4 rounded">Connect Wallet</button>
           <button onClick={handleMintPassport} className="bg-purple-600 text-white py-2 px-4 rounded">Mint Passport</button>
           <button onClick={handleClaimZone} className="bg-green-500 text-black py-2 px-4 rounded">Claim Zone</button>
-          <button onClick={() => setShowNicknameModal(true)} className="bg-yellow-400 text-black py-2 px-4 rounded">Set Nickname</button>
-          <button onClick={handleDeleteAccount} className="bg-red-700 text-white py-2 px-4 rounded">Delete Account</button>
         </div>
 
         {walletAddress && <StatsCard walletAddress={walletAddress} slypBalance={slypBalance} />}
