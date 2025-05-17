@@ -31,13 +31,14 @@ export async function mintPassport(signer, userAddress, userUid) {
   const tx = await passport.mintPassport();
   const receipt = await tx.wait();
 
-  // Extract tokenId from Transfer event
-  const transferEvent = receipt.events.find(e => e.event === "Transfer" && e.args.to === userAddress);
-  const tokenId = transferEvent?.args?.tokenId?.toString();
+  const transferEvent = receipt.events.find(
+    e => e.event === "Transfer" && e.args.to.toLowerCase() === userAddress.toLowerCase()
+  );
 
+  const tokenId = transferEvent?.args?.tokenId?.toString();
   if (!tokenId) throw new Error("Mint succeeded but token ID not found");
 
-  // Save passport to Firestore
+  // Write passport to Firestore
   await setDoc(doc(db, "passports", tokenId), {
     tokenId,
     wallet: userAddress,
@@ -45,12 +46,12 @@ export async function mintPassport(signer, userAddress, userUid) {
     timestamp: Date.now()
   });
 
-  // Update user to reflect they now have a passport
+  // Mark user as having a passport
   await updateDoc(doc(db, "users", userUid), {
     hasPassport: true
   });
 
-  // Small delay to avoid UI sync race
+  // Let frontend sync and fetch metadata
   await new Promise(res => setTimeout(res, 1000));
 
   return tokenId;
