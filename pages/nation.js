@@ -57,30 +57,18 @@ async function fetchPassport(uid, setPassportId, setPassportImage) {
   try {
     const q = query(collection(db, "passports"), where("ownerUid", "==", uid));
     const snapshot = await getDocs(q);
-
     if (!snapshot.empty) {
       const docData = snapshot.docs[0].data();
-      const rawTokenId = docData.tokenId;
-
-      // Validate and sanitize tokenId
-      const id = String(rawTokenId).trim();
-      if (!/^\d+$/.test(id)) throw new Error("Invalid tokenId format: " + rawTokenId);
+      const id = String(docData.tokenId).trim();
+      if (!/^\d+$/.test(id)) throw new Error("Invalid tokenId: " + id);
 
       setPassportId(Number(id));
 
-      const url = `https://slyroze.com/metadata/passport/${id}.json`;
-      const res = await fetch(url);
-
-      if (!res.ok) throw new Error(`Metadata fetch failed: ${res.status}`);
+      const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
       const json = await res.json();
 
-      if (json.image) {
-        setPassportImage(json.image);
-      } else {
-        throw new Error("Image missing in metadata");
-      }
+      setPassportImage(json.image || null);
     } else {
-      console.warn("No passport found for user:", uid);
       setPassportId(null);
       setPassportImage(null);
     }
@@ -89,7 +77,7 @@ async function fetchPassport(uid, setPassportId, setPassportImage) {
     setPassportId(null);
     setPassportImage(null);
   }
-}
+    }
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
@@ -175,6 +163,7 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
+
   const handleClaimZone = async () => {
     if (!signer || !walletAddress) return setCustomAlert("Connect Wallet first.");
     try {
@@ -182,7 +171,7 @@ export default function Nation() {
       if (!zoneId) return;
       const slypPrice = 50;
       setLoadingMessage(`Claiming ${zoneId}...`);
-      const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
+      const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice, user?.uid);
       setCustomAlert(result);
       const updatedLeaderboard = await getLeaderboard();
       setLeaderboard(updatedLeaderboard);
@@ -224,7 +213,6 @@ export default function Nation() {
       setLoadingMessage("");
     }
   };
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-black text-white">
       <Header />
@@ -314,4 +302,4 @@ export default function Nation() {
       <NationMapOverlay />
     </div>
   );
-    }
+            }
