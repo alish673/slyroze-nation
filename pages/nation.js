@@ -116,36 +116,38 @@ export default function Nation() {
   };
 
   async function fetchPassport(uid) {
-    try {
-      const passSnap = await getDocs(collection(db, "passports"));
-      let found = null;
-      passSnap.forEach((doc) => {
-        if (doc.data().ownerUid === uid) found = doc;
-      });
+  try {
+    const passSnap = await getDocs(collection(db, "passports"));
+    let found = null;
+    passSnap.forEach((doc) => {
+      if (doc.data().ownerUid === uid) found = doc;
+    });
 
-      if (found) {
-        const id = found.data().tokenId || found.id;
-        setPassportId(id);
-        const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
-        const raw = await res.text();
-        try {
-          const data = JSON.parse(raw);
-          if (data && data.image) {
-            setPassportImage(data.image);
-          } else {
-            setPassportImage(null);
-          }
-        } catch {
+    if (found) {
+      const rawTokenId = found.data().tokenId || found.id;
+      const id = parseInt(rawTokenId);  // ✅ Force numeric ID
+      setPassportId(id);
+
+      const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
+      const raw = await res.text();
+      try {
+        const data = JSON.parse(raw);
+        if (data && data.image) {
+          setPassportImage(data.image);
+        } else {
           setPassportImage(null);
         }
-      } else {
-        setPassportId(null);
+      } catch {
         setPassportImage(null);
       }
-    } catch {
+    } else {
       setPassportId(null);
       setPassportImage(null);
     }
+  } catch {
+    setPassportId(null);
+    setPassportImage(null);
+  }
   }
 
   const handleLogout = async () => {
