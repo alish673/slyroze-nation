@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { signOut, onAuthStateChanged, deleteUser } from "firebase/auth";
-import { collection, getDocs, doc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from '../utils/firebase';
 import Header from '../components/Header';
 import NationMapOverlay from '../components/NationMapOverlay';
@@ -53,59 +53,6 @@ function AlertModal({ message, onClose }) {
   );
 }
 
-import { query, where } from "firebase/firestore";
-
-async function fetchPassport(uid) {
-  try {
-    console.log("Fetching Passport for UID:", uid);
-
-    const q = query(collection(db, "passports"), where("ownerUid", "==", uid));
-    const snapshot = await getDocs(q);
-
-    console.log("Snapshot size:", snapshot.size);
-    if (snapshot.empty) {
-      console.warn("No passport found for this UID.");
-      setPassportId(null);
-      setPassportImage(null);
-      return;
-    }
-
-    const doc = snapshot.docs[0];
-    const data = doc.data();
-    console.log("Passport doc found:", doc.id, data);
-
-    const rawTokenId = data.tokenId || doc.id;
-    const id = parseInt(rawTokenId);
-    console.log("rawTokenId:", rawTokenId, "→ parsed ID:", id);
-
-    setPassportId(id);
-
-    const metadataUrl = `https://slyroze.com/metadata/passport/${id}.json`;
-    console.log("Fetching metadata from:", metadataUrl);
-
-    const res = await fetch(metadataUrl);
-    const raw = await res.text();
-
-    try {
-      const json = JSON.parse(raw);
-      console.log("Metadata JSON:", json);
-
-      if (json && json.image) {
-        setPassportImage(json.image);
-      } else {
-        console.warn("No image found in metadata.");
-        setPassportImage(null);
-      }
-    } catch (err) {
-      console.error("Error parsing metadata JSON:", err.message);
-      setPassportImage(null);
-    }
-  } catch (err) {
-    console.error("fetchPassport() failed:", err.message);
-    setPassportId(null);
-    setPassportImage(null);
-  }
-}
 export default function Nation() {
   const [walletAddress, setWalletAddress] = useState("");
   const [slypBalance, setSlypBalance] = useState("");
@@ -124,7 +71,6 @@ export default function Nation() {
   const [passportImage, setPassportImage] = useState(null);
   const [showMintModal, setShowMintModal] = useState(false);
   const [customAlert, setCustomAlert] = useState("");
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
       setUser(usr);
@@ -168,33 +114,40 @@ export default function Nation() {
       setCustomAlert("Wallet connect failed. " + err.message);
     }
   };
+
   async function fetchPassport(uid) {
-    try {
-      const q = query(collection(db, "passports"), where("ownerUid", "==", uid));
-      const snapshot = await getDocs(q);
+  try {
+    const passSnap = await getDocs(collection(db, "passports"));
+    let found = null;
+    passSnap.forEach((doc) => {
+      if (doc.data().ownerUid === uid) found = doc;
+    });
 
-      if (!snapshot.empty) {
-        const doc = snapshot.docs[0];
-        const rawTokenId = doc.data().tokenId || doc.id;
-        const id = parseInt(rawTokenId);
-        setPassportId(id);
+    if (found) {
+      const rawTokenId = found.data().tokenId || found.id;
+      const id = parseInt(rawTokenId);  // ✅ Force numeric ID
+      setPassportId(id);
 
-        const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
-        const raw = await res.text();
-        try {
-          const data = JSON.parse(raw);
-          setPassportImage(data.image || null);
-        } catch {
+      const res = await fetch(`https://slyroze.com/metadata/passport/${id}.json`);
+      const raw = await res.text();
+      try {
+        const data = JSON.parse(raw);
+        if (data && data.image) {
+          setPassportImage(data.image);
+        } else {
           setPassportImage(null);
         }
-      } else {
-        setPassportId(null);
+      } catch {
         setPassportImage(null);
       }
-    } catch {
+    } else {
       setPassportId(null);
       setPassportImage(null);
     }
+  } catch {
+    setPassportId(null);
+    setPassportImage(null);
+  }
   }
 
   const handleLogout = async () => {
@@ -358,4 +311,4 @@ export default function Nation() {
       <NationMapOverlay />
     </div>
   );
-            }
+}
