@@ -19,10 +19,11 @@ import { getLeaderboard } from '../utils/leaderboard';
 import { setUserAlias } from '../utils/nickname';
 import { FaTelegram, FaTwitter, FaInstagram } from 'react-icons/fa';
 
+// Mint Success Modal
 function MintSuccessModal({ tokenId, onClose }) {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(tokenId);
-    alert("Token ID copied!");
+    setCustomAlert("Token ID copied!");
   };
 
   return (
@@ -36,6 +37,19 @@ function MintSuccessModal({ tokenId, onClose }) {
           <button onClick={copyToClipboard} className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Copy ID</button>
           <button onClick={onClose} className="bg-red-600 px-4 py-2 rounded hover:bg-red-700">Close</button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Reusable Alert Modal
+function AlertModal({ message, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+      <div className="bg-gray-900 text-white p-6 rounded-xl shadow-lg w-[90%] max-w-sm text-center border border-red-500">
+        <h2 className="text-lg font-semibold mb-3">Notice</h2>
+        <p className="text-sm mb-4">{message}</p>
+        <button onClick={onClose} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white">OK</button>
       </div>
     </div>
   );
@@ -58,6 +72,7 @@ export default function Nation() {
   const [passportId, setPassportId] = useState(null);
   const [passportImage, setPassportImage] = useState(null);
   const [showMintModal, setShowMintModal] = useState(false);
+  const [customAlert, setCustomAlert] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usr) => {
@@ -98,7 +113,7 @@ export default function Nation() {
       }
     } catch (err) {
       console.error(err);
-      alert("Wallet connect failed. " + err.message);
+      setCustomAlert("Wallet connect failed. " + err.message);
     }
   };
 
@@ -140,12 +155,12 @@ export default function Nation() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    alert("Logged out successfully.");
+    setCustomAlert("Logged out successfully.");
   };
 
   const handleMintPassport = async () => {
-    if (!signer || !walletAddress) return alert("Connect Wallet first.");
-    if (passportId) return alert("You already have a Passport.");
+    if (!signer || !walletAddress) return setCustomAlert("Connect Wallet first.");
+    if (passportId) return setCustomAlert("You already have a Passport.");
     try {
       setLoadingMessage("Minting Passport...");
       const tokenId = await mintPassport(signer, walletAddress, user?.uid);
@@ -155,41 +170,41 @@ export default function Nation() {
       setPassportId(tokenId);
       setShowMintModal(true);
     } catch (err) {
-      alert("Minting failed: " + err.message);
+      setCustomAlert("Minting failed: " + err.message);
     } finally {
       setLoadingMessage("");
     }
   };
 
   const handleClaimZone = async () => {
-    if (!signer || !walletAddress) return alert("Connect Wallet first.");
+    if (!signer || !walletAddress) return setCustomAlert("Connect Wallet first.");
     try {
       const zoneId = prompt("Enter Zone ID to claim (e.g., zone-000001):");
       if (!zoneId) return;
       const slypPrice = 50;
       setLoadingMessage(`Claiming ${zoneId}...`);
       const result = await claimZoneWithSlyPass(signer, zoneId, slypPrice);
-      alert(result);
+      setCustomAlert(result);
       const updatedLeaderboard = await getLeaderboard();
       setLeaderboard(updatedLeaderboard);
     } catch (err) {
-      alert("Claim failed: " + err.message);
+      setCustomAlert("Claim failed: " + err.message);
     } finally {
       setLoadingMessage("");
     }
   };
 
   const handleSetAlias = async (nickname) => {
-    if (!walletAddress) return alert("Connect Wallet first.");
+    if (!walletAddress) return setCustomAlert("Connect Wallet first.");
     try {
       setLoadingMessage("Saving Nickname...");
-      if (!user) return alert("Login required.");
+      if (!user) return setCustomAlert("Login required.");
       await setUserAlias(user.uid, nickname);
       const data = await getLeaderboard();
       setLeaderboard(data);
-      alert("Nickname set successfully!");
+      setCustomAlert("Nickname set successfully!");
     } catch (err) {
-      alert("Failed to set nickname: " + err.message);
+      setCustomAlert("Failed to set nickname: " + err.message);
     } finally {
       setLoadingMessage("");
     }
@@ -197,15 +212,15 @@ export default function Nation() {
 
   const handleDeleteAccount = async () => {
     const confirmDelete = prompt("Type 'delete' to confirm account deletion:");
-    if (confirmDelete !== 'delete') return alert("Cancelled.");
+    if (confirmDelete !== 'delete') return setCustomAlert("Cancelled.");
     try {
       setLoadingMessage("Deleting Account...");
-      if (!user) return alert("Login required.");
+      if (!user) return setCustomAlert("Login required.");
       await deleteDoc(doc(db, "users", user.uid));
       await deleteUser(user);
-      alert("Account deleted.");
+      setCustomAlert("Account deleted.");
     } catch (err) {
-      alert("Failed to delete: " + err.message);
+      setCustomAlert("Failed to delete: " + err.message);
     } finally {
       setLoadingMessage("");
     }
@@ -282,9 +297,8 @@ export default function Nation() {
         </div>
       )}
 
-      {showMintModal && (
-        <MintSuccessModal tokenId={passportId} onClose={() => setShowMintModal(false)} />
-      )}
+      {customAlert && <AlertModal message={customAlert} onClose={() => setCustomAlert("")} />}
+      {showMintModal && <MintSuccessModal tokenId={passportId} onClose={() => setShowMintModal(false)} />}
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
       {showAboutPanel && <AboutPanel onClose={() => setShowAboutPanel(false)} />}
       {showDisclaimer && <DisclaimerPanel onClose={() => setShowDisclaimer(false)} />}
