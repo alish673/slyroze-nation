@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail
+} from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../utils/firebase';
 
 export default function AuthModal({ onClose }) {
   const [email, setEmail] = useState('');
@@ -11,20 +19,55 @@ export default function AuthModal({ onClose }) {
     e.preventDefault();
     setLoading(true);
     const auth = getAuth();
+
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        if (!result.user.emailVerified) {
+          alert("Please verify your email before logging in.");
+          setLoading(false);
+          return;
+        }
         alert("Logged in successfully!");
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created successfully!");
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Send email verification
+        await sendEmailVerification(result.user);
+        alert("Account created. Check your email for verification before logging in.");
+
+        // Create user record in Firestore
+        await setDoc(doc(db, "users", result.user.uid), {
+          username: email,
+          hasPassport: false,
+          slyBalance: 0,
+          claimedZones: 0,
+          createdAt: Date.now()
+        });
       }
+
       onClose();
     } catch (error) {
       console.error(error);
       alert(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const auth = getAuth();
+    if (!email) {
+      alert("Enter your email above first.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset email sent. Please check your inbox.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send reset email: " + err.message);
     }
   };
 
@@ -49,6 +92,15 @@ export default function AuthModal({ onClose }) {
             className="w-full p-2 rounded text-black"
             required
           />
+          {isLogin && (
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-sm text-blue-400 underline"
+            >
+              Forgot Password?
+            </button>
+          )}
           <button
             type="submit"
             disabled={loading}
