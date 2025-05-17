@@ -40,18 +40,20 @@ export default function Landing() {
         <HeroBackground />
         <Header />
 
-        {/* Logo Row */}
+        {/* Top Logos */}
         <div className="absolute top-4 left-4 flex items-center gap-2">
           <img src="/slypass-logo.png" alt="SlyPass Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <img src="/slyroze-nation-logo.png" alt="Nation Logo" className="h-10 w-10 rounded-lg shadow-lg bg-white/10 p-1" />
         </div>
+
+        {/* Center Logo */}
         <div className="flex justify-center pt-12">
           <img src="/slyroze-logo.png" alt="Slyroze Logo" className="h-20 w-auto rounded-xl shadow-xl bg-white/10 p-2" />
         </div>
 
-        {/* Banner Section */}
+        {/* Banner */}
         <div className="max-w-2xl mx-auto mt-6 px-4 animate-fadeInUp">
           <img src="/banner.png" alt="Fly High Stay Sly" className="w-full rounded-2xl shadow-xl border border-yellow-500" />
         </div>
@@ -65,7 +67,12 @@ export default function Landing() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="https://pancakeswap.finance/" target="_blank" className="bg-neonGreen text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all">
+              <a
+                href="https://pancakeswap.finance/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-neonGreen text-black font-semibold py-3 px-6 rounded-xl shadow-xl hover:scale-105 transition-all"
+              >
                 Buy on PancakeSwap
               </a>
               <Link href="/nation" passHref legacyBehavior>
@@ -81,6 +88,7 @@ export default function Landing() {
             </div>
           </section>
 
+          {/* Social Icons */}
           <div className="flex justify-center gap-6 text-xl mt-8">
             <a href="https://x.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-slyrozePink hover:scale-125 transition"><FaTwitter /></a>
             <a href="https://t.me/+L2sVdT1egVRiOTM1" target="_blank" rel="noopener noreferrer" className="hover:text-neonGreen hover:scale-125 transition"><FaTelegram /></a>
@@ -88,6 +96,7 @@ export default function Landing() {
             <a href="https://www.instagram.com/slyroze" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300 hover:scale-125 transition"><FaInstagram /></a>
           </div>
 
+          {/* Ecosystem Map */}
           <section className="space-y-10">
             <h2 className="text-3xl font-semibold">Slyroze Ecosystem</h2>
             <div className="rounded-xl overflow-hidden shadow-xl border border-gray-700">
@@ -95,6 +104,7 @@ export default function Landing() {
             </div>
           </section>
 
+          {/* Expandable Sections */}
           <section className="space-y-6">
             <button onClick={() => setShowWhy(!showWhy)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
@@ -112,10 +122,7 @@ export default function Landing() {
                 </ul>
               </div>
             )}
-          </section>
-
-          <section className="space-y-10">
-            <button onClick={() => setShowTokenomics(!showTokenomics)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
+<button onClick={() => setShowTokenomics(!showTokenomics)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Tokenomics <span>{showTokenomics ? '-' : '+'}</span>
               </h2>
@@ -132,7 +139,8 @@ export default function Landing() {
                 <p>No taxes, no burns, direct utility for NFT minting & zone claiming.</p>
               </div>
             )}
-<button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
+
+            <button onClick={() => setShowRoadmap(!showRoadmap)} className="w-full bg-gray-800/80 py-4 px-6 rounded-lg hover:bg-gray-700/80 transition">
               <h2 className="text-3xl font-semibold flex justify-between items-center">
                 Roadmap <span>{showRoadmap ? '-' : '+'}</span>
               </h2>
@@ -160,6 +168,7 @@ export default function Landing() {
             )}
           </section>
 
+          {/* Trust Badges */}
           <section className="space-y-6">
             <h2 className="text-2xl font-semibold text-center">Verified & Secure</h2>
             <div className="flex justify-center flex-wrap gap-4 text-sm text-gray-300">
@@ -170,6 +179,7 @@ export default function Landing() {
             </div>
           </section>
 
+          {/* Footer */}
           <footer className="text-center text-sm text-gray-500 mt-16 space-y-4">
             <div className="flex justify-center items-center gap-6">
               <div className="bg-gray-800/80 p-2 rounded-lg">
@@ -194,4 +204,4 @@ export default function Landing() {
       </div>
     </>
   );
-            }
+              }
